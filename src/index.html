@@ -8,34 +8,38 @@
     <link rel="stylesheet" href="./css/style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
-<body>
-   <header class="app-header">
+<body onload="home()">
+   <!-- <header class="app-header">
         <div class="header-content">
             <h1>Sistema POS</h1>
             <div class="search-bar">
                 <input type="text" placeholder="Pesquisar..." class="search-input">
                 <i class='bx bx-search'></i>
             </div>
-            <!-- Outros elementos do cabeçalho podem ser adicionados aqui -->
+          
         </div>
-    </header>
+    </header> -->
     <div class="container">
     
         <div class="sidebar">
-            <button id="home"><i class='bx bx-home' ></i> <br> Home</button>
-            <button id="customers"><i class='bx bx-user'></i>Customers</button>
-            <button id="cashier"><i class='bx bxs-coin'></i>Cashier</button>
-            <button id="orders"><i class='bx bx-shopping-bag' ></i>Orders</button>
-            <button id="reports"><i class='bx bxs-report' ></i>Reports</button>
-            <button id="settings"><i class='bx bx-cog' ></i>Settings</button>
-            <button id="logout"><i class='bx bx-log-out-circle' ></i>Logout</button>
+            <button id="home" onclick="home()"><i class='bx bx-home' ></i> <br> Home</button>
+            <button id="customers" onclick="clientes()"><i class='bx bx-user'></i>Clientes</button>
+            <button id="cashier" onclick="cashier()"><i class='bx bxs-coin'></i>Cashier</button>
+            <button id="orders" onclick="orders()"><i class='bx bx-shopping-bag' ></i>Ordens</button>
+            <button id="reports" onclick="reports()"><i class='bx bxs-report' ></i>Dashboard</button>
+            <button id="settings" onclick="settings()"><i class='bx bx-cog' ></i>Definições</button>
+            <button id="logout" onclick="logout()"><i class='bx bx-log-out-circle' ></i>Logout</button>
         </div>
         <div class="main">
-            <div class="menu">
-              <!-- <div class="header">
+            <div class="header">
                 <h1>POS</h1>
-                <input type="search" class="search_input">
-              </div> -->
+                <input type="search" name="" id="">
+                <button>search</button>
+                <button>search</button>
+                <button>search</button>
+
+            </div>
+            <div class="menu">
                 <button class="menu-btn" id="starters">Starters</button>
                 <button class="menu-btn" id="breakfast">Breakfast</button>
                 <button class="menu-btn" id="lunch">Lunch</button>
@@ -48,15 +52,15 @@
                     <!-- Items will be dynamically loaded here -->
                 </div>
                 <div class="cart">
-                    <h2>Cart</h2>
+                    <h2>Carinho</h2>
                     <div id="cart-items"></div>
                     <div class="cart-total">
                         <div>Subtotal: $<span id="subtotal">0.00</span></div>
                         <div>Tax: $<span id="tax">0.00</span></div>
-                        <div>Payable Amount: $<span id="payable-amount">0.00</span></div>
+                        <div>Pagamento total: $<span id="payable-amount">0.00</span></div>
                     </div>
-                    <button id="hold-cart">Hold Cart</button>
-                    <button id="proceed">Proceed</button>
+                    <button id="hold-cart">Fechar Carinho</button>
+                    <button id="proceed">Procedir</button>
                 </div>
             </div>
         </div>
