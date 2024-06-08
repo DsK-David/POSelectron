@@ -6,7 +6,7 @@
   /* --secundary--color: #34495E; Cinza Carvão */
   --secundary--color:#fff;
   --main--button--color: #1ABC9C; /* Verde Esmeralda */
-  --main--hover--button--color: #16A085; /* Verde Escuro */
+  --main--hover--button--color: #FC8019; /* Verde Escuro */
   --accent--color: #F39C12; /* Amarelo Ouro */
   --background--color: #ECF0F1; /* Cinza Claro */
   --text--color: #FFFFFF; /* Branco */
@@ -20,7 +20,51 @@ body {
     margin: 0;
     background-color: var(--background--color);
 }
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #333; /* Cor de fundo do cabeçalho */
+    color: white; /* Cor do texto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1; /* Garante que o cabeçalho fique acima de outros elementos */
+}
 
+.header-content {
+    width: 100%; /* Ajuste conforme necessário */
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #444; /* Cor de fundo do campo de pesquisa */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 5px;
+}
+
+.search-input:focus {
+    background-color: #555; /* Cor de fundo ao focar */
+}
+
+.sidebar {
+    margin-top: 60px; /* Ajuste para compensar a altura do cabeçalho */
+}
 .container {
     display: flex;
     width: 100%;
@@ -40,12 +84,12 @@ body {
 .sidebar button {
     margin-bottom: 20px;
     padding: 20px;
-    background-color: var(--main--button--color);
+    background-color: none;
     border: none;
     cursor: pointer;
     text-align: center;
     border-radius: 10px;
-    color: var(--text--color);
+   
 }
 
 .sidebar button:hover {
@@ -78,6 +122,7 @@ body {
     text-align: center;
     border-radius: 10px;
     color: var(--text--color);
+    height: 50px;
 }
 
 .menu-btn:hover {
