@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const cartItemDiv = document.createElement("div");
       cartItemDiv.innerText = `${item.nome} - $${item.preco}`;
       cartItemsContainer.appendChild(cartItemDiv);
-      subtotal += item.price;
+      subtotal += item.preco;
     });
     const tax = subtotal * 0.225;
     const payableAmount = subtotal - tax;
