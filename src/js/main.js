@@ -6,33 +6,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   const payableAmountElement = document.getElementById("payable-amount");
 
   let cart = [];
+  let itemsData = []; // Move itemsData para fora do evento para torná-la global
 
   async function fetchItemsData() {
     try {
       const response = await fetch("http://localhost:5500/api/v1/produtos"); // Substitua pela URL da sua API
-      const itemsData = await response.json(); // Assumindo que a resposta seja um JSON
-      return itemsData;
+      itemsData = await response.json(); // Atualiza a variável global itemsData
     } catch (error) {
-      console.error('Erro ao buscar dados da API:', error);
-      return []; // Retorna um array vazio em caso de erro
+      console.error("Erro ao buscar dados da API:", error);
     }
   }
 
   async function renderItems() {
-    const itemsData = await fetchItemsData(); // Busca os dados da API
+    await fetchItemsData(); // Garante que itemsData seja preenchida antes de renderizar os itens
     itemsContainer.innerHTML = "";
-    itemsData.forEach((item, index) => {
+    itemsData.forEach((item) => {
       const itemDiv = document.createElement("div");
       itemDiv.className = "item";
-      // Ajuste o template abaixo conforme a estrutura dos seus dados
       itemDiv.innerHTML = `<img src="${item.imagem}" alt="${item.nome}"><br>${item.nome}<br>$${item.preco}`;
-      itemDiv.onclick = () => addToCart(index);
+      itemDiv.onclick = () => addToCart(item); // Passa o objeto item diretamente
       itemsContainer.appendChild(itemDiv);
     });
   }
 
-  function addToCart(index) {
-    cart.push(itemsData[index]); // Certifique-se de que itemsData esteja acessível aqui
+  function addToCart(item) {
+    cart.push(item); // Adiciona o item diretamente ao carrinho
     renderCart();
     scrollToBottom(cartItemsContainer);
   }
@@ -44,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const cartItemDiv = document.createElement("div");
       cartItemDiv.innerText = `${item.nome} - $${item.preco}`;
       cartItemsContainer.appendChild(cartItemDiv);
-      subtotal += item.preco;
+      subtotal += item.price;
     });
     const tax = subtotal * 0.225;
     const payableAmount = subtotal - tax;
