@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Admin LOGIN</title>
+  </head>
+  <body>
+    <nav>
+      <button id="theme-toggle">
+       <span id="theme-icon-dark" class="theme-icon"><i class='bx bxs-moon'></i></span>
+      <span id="theme-icon-light" class="theme-icon"><i class='bx bxs-sun' ></i></span>
+      </button>
+    </nav>
+    <form action="/api/v1/auth/admin/" method="post" class="admin_container">
+      <h1>Admin</h1>
+      <input
+        type="text"
+        class="username"
+        id="username"
+        name="username"
+        placeholder="Admin username"
+      />
+      <br />
+      <input
+        type="password"
+        class="password"
+        id="password"
+        name="password"
+        placeholder="Admin Password"
+      />
+      <br />
+      <button>Entrar</button>
+    </form>
+  </body>
+  <script src="/main.js"></script>
+</html>

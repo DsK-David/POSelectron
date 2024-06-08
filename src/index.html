@@ -1,0 +1,51 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS System</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <button id="home">Home</button>
+            <button id="customers">Customers</button>
+            <button id="tables">Tables</button>
+            <button id="cashier">Cashier</button>
+            <button id="orders">Orders</button>
+            <button id="reports">Reports</button>
+            <button id="settings">Settings</button>
+            <button id="logout">Logout</button>
+        </div>
+        <div class="main">
+            <div class="menu">
+                <button class="menu-btn" id="starters">Starters</button>
+                <button class="menu-btn" id="breakfast">Breakfast</button>
+                <button class="menu-btn" id="lunch">Lunch</button>
+                <button class="menu-btn" id="supper">Supper</button>
+                <button class="menu-btn" id="desserts">Desserts</button>
+                <button class="menu-btn" id="beverages">Beverages</button>
+            </div>
+            <div class="content">
+                <div class="items" id="items">
+                    <!-- Items will be dynamically loaded here -->
+                </div>
+                <div class="cart">
+                    <h2>Cart</h2>
+                    <div id="cart-items"></div>
+                    <div class="cart-total">
+                        <div>Subtotal: $<span id="subtotal">0.00</span></div>
+                        <div>Tax: $<span id="tax">0.00</span></div>
+                        <div>Payable Amount: $<span id="payable-amount">0.00</span></div>
+                    </div>
+                    <button id="hold-cart">Hold Cart</button>
+                    <button id="proceed">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/main.js"></script>
+</body>
+</html>
