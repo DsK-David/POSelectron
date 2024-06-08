@@ -20,51 +20,6 @@ body {
     margin: 0;
     background-color: var(--background--color);
 }
-.app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #333; /* Cor de fundo do cabeçalho */
-    color: white; /* Cor do texto */
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1; /* Garante que o cabeçalho fique acima de outros elementos */
-}
-
-.header-content {
-    width: 100%; /* Ajuste conforme necessário */
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.search-bar {
-    display: flex;
-    align-items: center;
-    background-color: #444; /* Cor de fundo do campo de pesquisa */
-    border-radius: 5px;
-    padding: 5px;
-}
-
-.search-input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: white;
-    padding: 5px;
-}
-
-.search-input:focus {
-    background-color: #555; /* Cor de fundo ao focar */
-}
-
-.sidebar {
-    margin-top: 60px; /* Ajuste para compensar a altura do cabeçalho */
-}
 .container {
     display: flex;
     width: 100%;
@@ -99,18 +54,43 @@ body {
 .sidebar button .bx{
  font-size: 15pt;
 }
-
+.sidebar button:first-child{
+    background-color: var(--main--hover--button--color);
+    color: #fff;
+}
+.sidebar button:last-child{
+    margin-top: 80%;
+    background-color: red;
+    color: white;
+}
 .main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
-
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.header h1{
+    margin: 0;
+    margin-right: 20px;
+}
+.header input{
+    padding: 10px;
+    border-radius: 6px;
+    width: 300px;
+    border: 1px solid #ddd;
+}
 .menu {
     display: flex;
+    flex-wrap: wrap;
     background-color: var(--main--color);
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    align-items: center;
 }
 
 .menu-btn {
@@ -128,6 +108,9 @@ body {
 .menu-btn:hover {
     background-color: var(--main--hover--button--color);
     color: var(--hover--text--color);
+}
+.menu-btn:focus{
+    border: 1px solid var(--main--hover--button--color);
 }
 
 .content {
@@ -157,6 +140,7 @@ body {
     text-align: center;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 15px;
 }
 
 .item:hover {
