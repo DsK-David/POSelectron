@@ -126,6 +126,16 @@ function home(){
  // Chama renderItems após o evento DOMContentLoaded
  renderItems(); 
 }
+document.querySelectorAll(".sidebar button").forEach((button) => {
+  button.addEventListener("click", function () {
+    // Remove a classe 'active' de todos os botões
+    document
+      .querySelectorAll(".sidebar button")
+      .forEach((btn) => btn.classList.remove("active"));
+    // Adiciona a classe 'active' ao botão clicado
+    this.classList.add("active");
+  });
+});
 function clientes(){
   const homeButton = document.getElementById("home");
     const customersButton = document.getElementById("customers");
@@ -135,10 +145,31 @@ function clientes(){
 
     
     const itemsContainer = document.getElementById("items");
-    itemsContainer.innerHTML=`
-    <h1>Clientes</h1>
+    itemsContainer.innerHTML = `
+    <div class="cliente_content"> 
+    <form action="/adicionar_cliente" method="POST" class="cliente-formulario">
+    <h2>Adicionar Cliente</h2>
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required placeholder="Nome Completo">
+
+    <label for="contato">Contato:</label>
+    <input type="tel" id="contato" name="contato" pattern="[0-9]{10,15}" required placeholder="Número de Telefone">
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="exemplo@email.com">
+
+    <label for="endereco">Endereço:</label>
+    <textarea id="endereco" name="endereco" rows="3" placeholder="Digite o endereço completo..."></textarea>
+
+    <label for="observacoes">Observações:</label>
+    <textarea id="observacoes" name="observacoes" rows="3" placeholder="Alguma observação especial?"></textarea>
+
+    <button type="submit">Salvar Cliente</button>
+</form>
+     </div>
+
     
-    `
+    `;
     
 }
 function cashier() {
