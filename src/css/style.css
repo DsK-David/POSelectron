@@ -46,17 +46,16 @@ body {
     border-radius: 10px;
    
 }
-
+.sidebar .active {
+    background-color:var(--main--hover--button--color); 
+    color: white; 
+}
 .sidebar button:hover {
     background-color: var(--main--hover--button--color);
-    color: var(--hover--text--color);
+    color: var(--main--color);
 }
 .sidebar button .bx{
  font-size: 15pt;
-}
-.sidebar button:first-child{
-    background-color: var(--main--hover--button--color);
-    color: #fff;
 }
 .sidebar button:last-child{
     margin-top: 80%;
@@ -78,11 +77,52 @@ body {
     margin: 0;
     margin-right: 20px;
 }
-.header input{
+.header input[type="search"]{
     padding: 10px;
     border-radius: 6px;
     width: 300px;
     border: 1px solid #ddd;
+   
+}
+.header .search_container{
+    margin-right: auto;
+}
+.header .search_container button{
+    background: #fff; 
+  color: #111; /* Cor do texto */
+  border: none; /* Remove a borda padrão */
+  padding: 10px 15px; /* Padding interno */
+  text-align: center; /* Centraliza o texto */
+  text-decoration: none; /* Remove sublinhado do texto */
+  display: inline-block;
+  cursor: pointer; /* Muda o cursor para indicar que é clicável */
+  border-radius: 12px; /* Bordas arredondadas */
+  transition-duration: 0.4s; /* Transição suave para hover */
+}
+.header .search_container button i{
+    text-align: center;
+     margin-right: 5px;
+}
+
+.header .search_container button:hover {
+  background: var(--main--button--color);
+  color: var(--main--color);
+}
+.header .wireless_widget{
+    color: var(--main--button--color);
+    background: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    font-size: 16px;
+    margin-right:3%;
+    width: 5%;
+}
+
+.header .wireless_widget:hover{
+    background: var(--main--button--color);
+    color: var(--main--color);
+    border-radius: 5px;
 }
 .menu {
     display: flex;
@@ -201,4 +241,72 @@ body {
 
 #hold-cart:hover, #proceed:hover {
     opacity: 0.8;
+}
+/* .container input{
+    padding: 10px;
+    border-radius: 6px;
+    width: 300px;
+    border: 1px solid #ddd;
+}
+.container .add_client_button{
+    margin-top: 10px;
+    padding: 10px;
+    width: 50%;
+    cursor: pointer;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+} */
+.container .cliente_content{
+    width: 100%;
+    height: 100%;
+
+}
+.container .cliente-formulario {
+    width: 80%;
+    height:90%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.cliente-formulario label {
+    display: block;
+    margin-top: 20px;
+}
+
+.cliente-formulario input,
+.cliente-formulario textarea {
+    width: 90%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    background: none;
+}
+
+.cliente-formulario button {
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: var(--main--button--color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cliente-formulario button:hover {
+    background-color: var(--main--hover--button--color);
+}
+
+.cliente-formulario h2 {
+    text-align: center;
+    color: #333;
 }
