@@ -193,6 +193,26 @@ function clientes() {
     
     `;
 }
+document.querySelector(".header-btn").addEventListener("click", openModal);
+
+// Função para abrir o modal
+function openModal() {
+  const modal = document.getElementById("MainModal");
+  modal.style.display = "block";
+
+  // Quando o usuário clica fora do modal, fecha-o
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // Botão de fechar
+  document.querySelector(".close").onclick = function () {
+    modal.style.display = "none";
+  };
+}
+
 function cashier() {
   const homeButton = document.getElementById("home");
   const customersButton = document.getElementById("customers");
