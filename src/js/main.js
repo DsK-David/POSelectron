@@ -198,6 +198,24 @@ document.querySelector(".header-btn").addEventListener("click", openModal);
 // Função para abrir o modal
 function openModal() {
   const modal = document.getElementById("MainModal");
+  const modalContent=document.querySelector(".modal-content")
+  modalContent.innerHTML = `
+  <span class="close">&times;</span>
+  <form action="/adicionar_cliente" method="POST" class="adicionar_cliente_fatura_form">
+    <h2>Adicionar Cliente</h2>
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required placeholder="Nome Completo">
+
+    <label for="contato">Contato:</label>
+    <input type="tel" id="contato" name="contato" pattern="[0-9]{10,15}" required placeholder="Número de Telefone">
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="exemplo@email.com">
+
+
+    <button type="submit">Salvar Cliente</button>
+</form>
+  `;
   modal.style.display = "block";
 
   // Quando o usuário clica fora do modal, fecha-o
