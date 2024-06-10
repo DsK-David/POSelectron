@@ -22,7 +22,7 @@
     <div class="container">
     
         <div class="sidebar">
-            <button id="home" onclick="home()"><i class='bx bx-home' ></i> <br> Home</button>
+            <button id="home" class="active" onclick="home()"><i class='bx bx-home' ></i> <br> Home</button>
             <button id="customers" onclick="clientes()"><i class='bx bx-user'></i>Clientes</button>
             <button id="cashier" onclick="cashier()"><i class='bx bxs-coin'></i>Cashier</button>
             <button id="orders" onclick="orders()"><i class='bx bx-shopping-bag' ></i>Ordens</button>
@@ -33,10 +33,11 @@
         <div class="main">
             <div class="header">
                 <h1>POS</h1>
-                <input type="search" name="" id="">
-                <button>search</button>
-                <button>search</button>
-                <button>search</button>
+                <div class="search_container">
+                    <input type="search" name="" id="">
+                    <button><i class='bx bx-search-alt-2'></i></button>
+                </div>
+                <button class="wireless_widget"><span><i class='bx bx-wifi'></i></span></button>
 
             </div>
             <div class="menu">
@@ -65,6 +66,7 @@
             </div>
         </div>
     </div>
+  
     <script src="./js/main.js"></script>
 </body>
 </html>
