@@ -267,10 +267,91 @@ function reports() {
 
   const itemsContainer = document.getElementById("items");
   itemsContainer.innerHTML = `
-    <h1>Dashboard</h1>
+    <div id="filter-controls">
+    <label for="day-filter">Dia:</label>
+    <input type="number" id="day-filter" min="1" max="31" placeholder="Dia">
+    <label for="month-filter">Mês:</label>
+    <input type="number" id="month-filter" min="1" max="12" placeholder="Mês">
+    <label for="year-filter">Ano:</label>
+    <input type="number" id="year-filter" placeholder="Ano">
+    <button onclick="applyFilter()">Filtrar</button>
+</div>
+<div id="purchases-container"></div>
     
     `;
 }
+async function applyFilter() {
+  const dayFilter = document.getElementById("day-filter").value;
+  const monthFilter = document.getElementById("month-filter").value;
+  const yearFilter = document.getElementById("year-filter").value;
+
+  try {
+    const response = await fetch("http://localhost:5500/api/v1/compra");
+    const purchases = await response.json();
+
+    const filteredPurchases = purchases.filter((purchase) => {
+      const purchaseDate = new Date(purchase.data_compra);
+      const dayMatches = dayFilter ? purchaseDate.getDate() == dayFilter : true;
+      const monthMatches = monthFilter
+        ? purchaseDate.getMonth() + 1 == monthFilter
+        : true; // getMonth() retorna 0-11
+      const yearMatches = yearFilter
+        ? purchaseDate.getFullYear() == yearFilter
+        : true;
+      return dayMatches && monthMatches && yearMatches;
+    });
+
+    displayPurchases(filteredPurchases);
+  } catch (error) {
+    console.error("Erro ao buscar os dados:", error);
+  }
+}
+
+function displayPurchases(purchases) {
+  const purchasesContainer = document.getElementById("purchases-container");
+  purchasesContainer.innerHTML = ""; // Limpa o container
+
+  if (purchases.length === 0) {
+    purchasesContainer.innerHTML =
+      "<p>Nenhuma compra encontrada para os filtros aplicados.</p>";
+    return;
+  }
+
+  purchases.forEach((purchase) => {
+    const purchaseElement = document.createElement("div");
+    purchaseElement.classList.add("purchase");
+
+    let itens;
+    try {
+      itens = JSON.parse(purchase.itens);
+    } catch (error) {
+      itens = purchase.itens;
+    }
+
+    const itensList = Array.isArray(itens)
+      ? itens.map((item) => `<li>${item.nome}: ${item.preco}</li>`).join("")
+      : itens;
+
+    purchaseElement.innerHTML = `
+      <div class="purchase-details">
+        <p><strong>ID:</strong> ${purchase.id}</p>
+        <p><strong>Itens:</strong></p>
+        <ul>${itensList}</ul>
+        <p><strong>Total:</strong> ${purchase.total}</p>
+        <p><strong>Data da compra:</strong> ${new Date(
+          purchase.data_compra
+        ).toLocaleDateString()}</p>
+        <p><strong>Hora da compra:</strong> ${purchase.hora_compra}</p>
+      </div>
+    `;
+    purchasesContainer.appendChild(purchaseElement);
+  });
+}
+
+
+
+
+
 function settings() {
   const homeButton = document.getElementById("home");
   const customersButton = document.getElementById("customers");
@@ -328,7 +409,7 @@ async function buy() {
 
         alert('Itens enviados com sucesso!');
         cart = []; // Limpa o carrinho após o envio bem-sucedido
-        renderCart(); // Atualiza a visualização do carrinho, se necessário
+        // renderCart(); // Atualiza a visualização do carrinho, se necessário
     } catch (error) {
         console.error('Erro ao enviar os itens:', error);
     }
