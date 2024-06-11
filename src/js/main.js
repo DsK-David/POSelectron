@@ -60,6 +60,8 @@
 // // Chama renderItems após o evento DOMContentLoaded
 // renderItems(); 
 // });
+let cart = [];
+let itemsData = [];
 
 function home() {
   const itemsContainer = document.getElementById("items");
@@ -71,8 +73,7 @@ function home() {
   const payableAmountElement = document.getElementById("payable-amount");
   // homeButton.style.border="1px solid #FC8019"
   // customersButton.style.border = "none";
-  let cart = [];
-  let itemsData = []; // Move itemsData para fora do evento para torná-la global
+   // Move itemsData para fora do evento para torná-la global
 
   async function fetchItemsData() {
     try {
@@ -295,4 +296,33 @@ function logout() {
     <h1>Logout bye bye</h1>
     
     `;
+}
+
+async function buy() {
+  if (cart.length === 0) {
+    alert("Carrinho vazio. Nenhum item para enviar.");
+    return; // Sai da função se o carrinho estiver vazio
+  }
+      const itemsToSend = cart.map(item => ({
+        nome: item.nome,
+        preco: item.preco
+    }));
+  try {
+    // const response = await fetch("/checkout", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ items: cart }),
+    // });
+console.log(JSON.stringify({items: itemsToSend}))
+    if (!response.ok) throw new Error("Falha ao enviar os itens para checkout");
+
+    alert("Itens enviados com sucesso!");
+    cart = []; // Limpa o carrinho após o envio bem-sucedido
+    renderCart(); // Atualiza a visualização do carrinho, se necessário
+  } catch (error) {
+    console.error("Erro ao enviar os itens:", error);
+    alert("Não foi possível enviar os itens. Tente novamente mais tarde.");
+  }
 }
