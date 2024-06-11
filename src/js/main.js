@@ -299,30 +299,37 @@ function logout() {
 }
 
 async function buy() {
-  if (cart.length === 0) {
-    alert("Carrinho vazio. Nenhum item para enviar.");
-    return; // Sai da função se o carrinho estiver vazio
-  }
-      const itemsToSend = cart.map(item => ({
+    if (cart.length === 0) {
+        alert('Carrinho vazio. Nenhum item para enviar.');
+        return; // Sai da função se o carrinho estiver vazio
+    }
+
+    const itemsToSend = cart.map(item => ({
         nome: item.nome,
         preco: item.preco
-    }));
-  try {
-    // const response = await fetch("/checkout", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ items: cart }),
-    // });
-console.log(JSON.stringify({items: itemsToSend}))
-    if (!response.ok) throw new Error("Falha ao enviar os itens para checkout");
+    }))
 
-    alert("Itens enviados com sucesso!");
-    cart = []; // Limpa o carrinho após o envio bem-sucedido
-    renderCart(); // Atualiza a visualização do carrinho, se necessário
-  } catch (error) {
-    console.error("Erro ao enviar os itens:", error);
-    alert("Não foi possível enviar os itens. Tente novamente mais tarde.");
-  }
+    try {
+        const response = await fetch("http://localhost:5500/api/v1/compra", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            itens: JSON.stringify(itemsToSend),
+            total: cart.reduce((acc, item) => acc + item.preco, 0), // Supondo que 'preco' é o preço de cada item
+            codigo: "SEU_CODIGO_DA_COMPRA", // Substitua 'SEU_CODIGO_DA_COMPRA' pelo código real da compra
+            data_compra: new Date().toISOString(), // Usa a data atual como string ISO
+            hora_compra: new Date().toLocaleTimeString(), // Usa a hora local atual como string
+          }),
+        });
+
+        if (!response.ok) throw new Error('Falha ao enviar os itens para checkout');
+
+        alert('Itens enviados com sucesso!');
+        cart = []; // Limpa o carrinho após o envio bem-sucedido
+        renderCart(); // Atualiza a visualização do carrinho, se necessário
+    } catch (error) {
+        console.error('Erro ao enviar os itens:', error);
+    }
 }
