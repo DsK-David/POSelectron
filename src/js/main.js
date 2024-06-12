@@ -230,7 +230,65 @@ function openModal() {
     modal.style.display = "none";
   };
 }
+document
+  .querySelector(".search_customers")
+  .addEventListener("click", openSearchCustomersModal);
 
+function openSearchCustomersModal() {
+  const modal = document.getElementById("MainModal");
+  const modalContent = document.querySelector(".modal-content");
+  modalContent.innerHTML = `
+  <div class="buscar_cliente_fatura_form">
+    <span class="close">&times;</span>
+    <h2>Procurar Cliente</h2>
+    <label for="nome">Nome:</label>
+    <input id="search-input" type="text" name="nome" required placeholder="Nome Completo">
+    <button id="search">Procurar Cliente</button>
+    <div id="search-results"></div>
+    </div>
+  `;
+  modal.style.display = "block";
+
+  // Quando o usuário clica fora do modal, fecha-o
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // Botão de fechar
+  document.querySelector(".close").onclick = function () {
+    modal.style.display = "none";
+  };
+
+  // Adiciona o event listener para o botão de pesquisa após a criação do modal
+  document.getElementById("search").addEventListener("click", searchCustomers);
+}
+
+async function searchCustomers() {
+  const query = document.getElementById("search-input").value.toLowerCase();
+  const response = await fetch("https://jsonplaceholder.typicode.com/users");
+  const users = await response.json();
+
+  const results = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query)
+  );
+
+  const resultsContainer = document.getElementById("search-results");
+  resultsContainer.innerHTML = "";
+
+  if (results.length > 0) {
+    results.forEach((user) => {
+      const userElement = document.createElement("p");
+      userElement.innerHTML = `<label>Name:</label> <span>${user.name}</span>,<span> Email: ${user.email}</span> <button>Adicionar</button>`;
+      resultsContainer.appendChild(userElement);
+    });
+  } else {
+    resultsContainer.innerHTML = "<p>No results found</p>";
+  }
+}
 function cashier() {
   const homeButton = document.getElementById("home");
   const customersButton = document.getElementById("customers");
@@ -278,6 +336,7 @@ function reports() {
 <div id="purchases-container"></div>
     
     `;
+    applyFilter()
 }
 async function applyFilter() {
   const dayFilter = document.getElementById("day-filter").value;

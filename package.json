@@ -6,6 +6,18 @@
   "scripts": {
     "app": "electron ."
   },
+  "build": {
+    "appId": "com.my-app.app",
+    "mac": {
+      "icon": "src/img/logo.icns"
+    },
+    "win": {
+      "icon": "src/img/logo.ico"
+    },
+    "linux": {
+      "icon": "src/img/logo.png"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

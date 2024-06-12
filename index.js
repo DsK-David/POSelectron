@@ -1,17 +1,23 @@
-const { app, BrowserWindow } = require("electron");
-const path = require("path")
+const { app, BrowserWindow, ipcMain, Notification } = require("electron");
+const path = require("path");
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
-    maximizable:true,
+    maximizable: true,
+    icon: path.join(__dirname, "src", "img", "logo.icns"),
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
     },
   });
-  const indexPath= path.join(__dirname,"/src/index.html")
-  win.loadFile(indexPath); // Carrega um arquivo HTML que você vai criar na próxima etapa
+
+  win.loadFile(path.join(__dirname, "src", "index.html"));
+
+  ipcMain.on("show-notification", (event, { title, body }) => {
+    new Notification({ title, body }).show();
+  });
 }
 
 app.whenReady().then(createWindow);
