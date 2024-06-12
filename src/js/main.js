@@ -191,7 +191,6 @@ function clientes() {
 </form>
      </div>
 
-    
     `;
 }
 document.querySelector(".header-btn").addEventListener("click", openModal);
@@ -274,7 +273,7 @@ function reports() {
     <input type="number" id="month-filter" min="1" max="12" placeholder="Mês">
     <label for="year-filter">Ano:</label>
     <input type="number" id="year-filter" placeholder="Ano">
-    <button onclick="applyFilter()">Filtrar</button>
+    <button  onclick="applyFilter()">Filtrar</button>
 </div>
 <div id="purchases-container"></div>
     
