@@ -76,7 +76,7 @@ body {
   top: 0;
   width: 100%; /* Tamanho completo */
   height: 100%; /* Tamanho completo */
-  overflow: auto; /* Habilita rolagem se necessário */
+  overflow-y: scroll; /* Habilita rolagem se necessário */
   background-color: rgb(0,0,0); /* Fundo preto com transparência */
   background-color: rgba(0,0,0,0.4); /* Fundo preto com transparência */
 }
@@ -124,6 +124,9 @@ body {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+.modal-content .adicionar_cliente_fatura_form button:hover{
+    background: var(--main--hover--button--color);
 }
 .close {
   color: #aaa;
@@ -300,6 +303,7 @@ body {
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     font-size: 14px;
 }
+
 #cart-items {
     overflow-y: scroll;
 }
@@ -445,3 +449,86 @@ body {
     text-align: center;
     color: #333;
 }
+/* Container for the filter controls */
+#filter-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* Espaço entre os elementos */
+  padding: 20px 0; /* Espaço acima e abaixo dos controles */
+  background-color: #f9f9f9; /* Cor de fundo */
+  border-bottom: 1px solid #ddd; /* Linha separadora */
+}
+
+#filter-controls label,#filter-controls input,#filter-controls button {
+  margin: 0 5px; /* Espaço ao redor dos elementos */
+}
+
+#filter-controls button {
+  padding: 10px 20px; /* Tamanho do botão */
+  background-color: var(--main--button--color); /* Cor de fundo do botão */
+  color: white; /* Cor do texto do botão */
+  border: none; /* Remove a borda padrão */
+  cursor: pointer; /* Muda o cursor para indicar que é clicável */
+  border-radius: 5px; /* Bordas arredondadas */
+  width: 100%;
+}
+
+/* Estilos para o contêiner de compras */
+#purchases-container {
+  padding: 20px; /* Espaço interno */
+  height: calc(100vh - 150px); 
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Estilos para cada compra */
+.purchase {
+  background-color: #f9f9f9; /* Cor de fundo das compras */
+  margin-bottom: 20px; /* Espaço abaixo de cada compra */
+  padding: 20px; /* Espaço interno das compras */
+  border-radius: 8px; /* Bordas arredondadas */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra suave */
+}
+
+.purchase h3,.purchase p {
+  margin: 0 0 10px; /* Espaço abaixo dos títulos e parágrafos */
+}
+
+.purchase ul {
+  list-style-type: none; /* Remove marcadores da lista */
+  padding: 0; /* Remove o preenchimento padrão da lista */
+}
+
+.purchase li {
+  margin-bottom: 5px; /* Espaço abaixo de cada item da lista */
+}
+
+/* Estilos para o indicador de carregamento e erro */
+.loading,.error {
+  text-align: center;
+  padding: 20px;
+  color: #666; /* Cor do texto */
+}
+
+.error {
+  color: red; /* Cor do texto de erro */
+}
+
+
+
+
+/* Button styling
+button {
+  background-color: #FC8019;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #e57017;
+} */
