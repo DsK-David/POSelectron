@@ -458,12 +458,17 @@ body {
   padding: 20px 0; /* Espaço acima e abaixo dos controles */
   background-color: #f9f9f9; /* Cor de fundo */
   border-bottom: 1px solid #ddd; /* Linha separadora */
+  width: 100%;
 }
 
 #filter-controls label,#filter-controls input,#filter-controls button {
   margin: 0 5px; /* Espaço ao redor dos elementos */
 }
-
+#filter-controls input{
+  padding: 5px;
+  border: 1px solid #111;
+  width: 100px;
+}
 #filter-controls button {
   padding: 10px 20px; /* Tamanho do botão */
   background-color: var(--main--button--color); /* Cor de fundo do botão */
@@ -471,7 +476,7 @@ body {
   border: none; /* Remove a borda padrão */
   cursor: pointer; /* Muda o cursor para indicar que é clicável */
   border-radius: 5px; /* Bordas arredondadas */
-  width: 100%;
+  width: 100px;
 }
 
 /* Estilos para o contêiner de compras */
