@@ -286,7 +286,7 @@ async function searchCustomers() {
       resultsContainer.appendChild(userElement);
     });
   } else {
-    resultsContainer.innerHTML = "<p>No results found</p>";
+    resultsContainer.innerHTML = "<p>Cliente não encontrado</p>";
   }
 }
 function cashier() {
@@ -315,29 +315,88 @@ function orders() {
     
     `;
 }
-function reports() {
-  const homeButton = document.getElementById("home");
-  const customersButton = document.getElementById("customers");
-  customersButton.className = "select";
-  // homeButton.style.border = "none";
-  // customersButton.style.border = "1px solid #FC8019";
-
-  const itemsContainer = document.getElementById("items");
-  itemsContainer.innerHTML = `
-    <div id="filter-controls">
-    <label for="day-filter">Dia:</label>
-    <input type="number" id="day-filter" min="1" max="31" placeholder="Dia">
-    <label for="month-filter">Mês:</label>
-    <input type="number" id="month-filter" min="1" max="12" placeholder="Mês">
-    <label for="year-filter">Ano:</label>
-    <input type="number" id="year-filter" placeholder="Ano">
-    <button  onclick="applyFilter()">Filtrar</button>
-</div>
-<div id="purchases-container"></div>
-    
-    `;
-    applyFilter()
+function dashboard() {
+    showLogin()
 }
+function reports(){
+const itemsContainer = document.getElementById("items");
+itemsContainer.innerHTML = `
+        <div id="filter-controls">
+            <label for="day-filter">Dia:</label>
+            <input type="number" id="day-filter" min="1" max="31" placeholder="Dia">
+            <label for="month-filter">Mês:</label>
+            <input type="number" id="month-filter" min="1" max="12" placeholder="Mês">
+            <label for="year-filter">Ano:</label>
+            <input type="number" id="year-filter" placeholder="Ano">
+            <button onclick="applyFilter()">Filtrar</button>
+        </div>
+        <div id="purchases-container"></div>
+        `;
+applyFilter();
+}
+    function showLogin() {
+      const itemsContainer = document.getElementById("items");
+      itemsContainer.innerHTML = `
+                <div id="items" class="login-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button onclick="login()">Entrar</button>
+            </form>
+        </div>
+    </div>
+            `;
+    }
+async function login() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  // try {
+  //   const response = await fetch("http://localhost:5500/api/v1/admin", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       username: username,
+  //       password: password,
+  //     }),
+  //   });
+
+  //   console.log("Status:", response.status); // Adicione isso para ver o código de status
+  //   if (response.ok) {
+  //     const data = await response.json();
+  //     console.log(data); // Mantenha isso para ver a estrutura da resposta
+
+  //     if (data.token) {
+  //       reports(); // Troca para a tela do dashboard
+  //     } else {
+  //       alert("Usuário ou senha incorretos!");
+  //     }
+  //   } else {
+  //     console.log("Erro na resposta:", response.statusText); // Adicione isso para mais detalhes
+  //     alert("Erro ao fazer login. Tente novamente.");
+  //   }
+  // } catch (error) {
+  //   console.error("Erro ao fazer login:", error);
+  //   alert(`Erro ao fazer login. Tente novamente. Detalhes: ${error.message}`);
+  // }
+  if(username === "david" && password==="2513" ){
+    reports()
+  }
+  else{
+    alert("Usuário ou senha incorretos!")
+  }
+}
+
 async function applyFilter() {
   const dayFilter = document.getElementById("day-filter").value;
   const monthFilter = document.getElementById("month-filter").value;
