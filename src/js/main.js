@@ -5,6 +5,7 @@
 //   const taxElement = document.getElementById("tax");
 //   const payableAmountElement = document.getElementById("payable-amount");
 
+
 //   let cart = [];
 //   let itemsData = []; // Move itemsData para fora do evento para torná-la global
 
@@ -160,6 +161,9 @@ document.querySelectorAll(".sidebar button").forEach((button) => {
     this.classList.add("active");
   });
 });
+// Função para lidar com o envio do formulário
+
+
 function clientes() {
   const homeButton = document.getElementById("home");
   const customersButton = document.getElementById("customers");
@@ -170,29 +174,58 @@ function clientes() {
   const itemsContainer = document.getElementById("items");
   itemsContainer.innerHTML = `
     <div class="cliente_content"> 
-    <form action="/adicionar_cliente" method="POST" class="cliente-formulario">
-    <h2>Adicionar Cliente</h2>
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome" required placeholder="Nome Completo">
+      <form id="add-client-form" method="POST"class="cliente-formulario">
+        <h2>Adicionar Cliente</h2>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required placeholder="Nome Completo">
 
-    <label for="contato">Contato:</label>
-    <input type="tel" id="contato" name="contato" pattern="[0-9]{10,15}" required placeholder="Número de Telefone">
+        <label for="contato">Contato:</label>
+        <input type="number" id="contacto" name="contacto" required placeholder="Número de Telefone">
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" placeholder="exemplo@email.com">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="exemplo@email.com">
 
-    <label for="endereco">Endereço:</label>
-    <textarea id="endereco" name="endereco" rows="3" placeholder="Digite o endereço completo..."></textarea>
+        <label for="endereco">Endereço:</label>
+        <textarea id="endereco" name="endereco" rows="3" placeholder="Digite o endereço completo..."></textarea>
 
-    <label for="observacoes">Observações:</label>
-    <textarea id="observacoes" name="observacoes" rows="3" placeholder="Alguma observação especial?"></textarea>
+        <label for="observacoes">Observações:</label>
+        <textarea id="observacoes" name="observacoes" rows="3" placeholder="Alguma observação especial?"></textarea>
 
-    <button type="submit">Salvar Cliente</button>
-</form>
-     </div>
-
-    `;
+        <button onclick="saveClient()">Salvar Cliente</button>
+      </form>
+      <span id="success-message" style="display:none;">Cliente adicionado com sucesso!</span>
+      <span id="error-message" style="display:none;">Erro ao adicionar cliente!</span>
+    </div>
+  `;
 }
+
+function saveClient(){
+
+  const nome = document.getElementById("nome").value;
+  const contacto = document.getElementById("contacto").value; // Corrigido o ID
+  const email = document.getElementById("email").value;
+  const endereco = document.getElementById("endereco").value;
+  const observacoes = document.getElementById("observacoes").value;
+
+
+  fetch("http://localhost:3000/api/v1/clientes",{
+    method: "POST",
+    headers:{
+      "Content-Type": "application/json"
+    },
+    body:JSON.stringify({
+      nome:nome,
+      telefone:contacto,
+      email:email,
+      endereco:endereco,
+      obs:observacoes
+    })
+  })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error("erro",error))
+}
+
 document.querySelector(".header-btn").addEventListener("click", openModal);
 
 // Função para abrir o modal
@@ -264,15 +297,14 @@ function openSearchCustomersModal() {
   // Adiciona o event listener para o botão de pesquisa após a criação do modal
   document.getElementById("search").addEventListener("click", searchCustomers);
 }
-
 async function searchCustomers() {
   const query = document.getElementById("search-input").value.toLowerCase();
-  const response = await fetch("https://jsonplaceholder.typicode.com/users");
+  const response = await fetch("http://localhost:3000/api/v1/clientes");
   const users = await response.json();
 
   const results = users.filter(
     (user) =>
-      user.name.toLowerCase().includes(query) ||
+      user.nome.toLowerCase().includes(query) ||
       user.email.toLowerCase().includes(query)
   );
 
@@ -282,12 +314,29 @@ async function searchCustomers() {
   if (results.length > 0) {
     results.forEach((user) => {
       const userElement = document.createElement("p");
-      userElement.innerHTML = `<label>Name:</label> <span>${user.name}</span>,<span> Email: ${user.email}</span> <button>Adicionar</button>`;
+      userElement.innerHTML = `<label>Name:</label> 
+      <span>${user.nome}</span>,<span> Email: ${user.email}</span>,
+      OBS: ${user.obs}</span>
+       <button class="add_fatura">Adicionar</button>`;
+       userElement.querySelector(".add_fatura").addEventListener('click',()=> adicionarNaFatura(user))
       resultsContainer.appendChild(userElement);
     });
   } else {
     resultsContainer.innerHTML = "<p>Cliente não encontrado</p>";
   }
+}
+
+function adicionarNaFatura(user) {
+  const cliente_header = document.querySelector(".cliente_na_fatura");
+  const cart_header = document.querySelector(".cart-header")
+  cliente_header.innerHTML = `
+    <span>${user.nome}</span> - <span>${user.email}</span> - <span>${user.obs}</span>
+    <button class="remove-item">X</button>`;
+
+  // Adiciona um ouvinte de evento para remover o item do carrinho
+  cliente_header.querySelector('.remove-item').addEventListener('click', () => {
+    cliente_header.parentElement.removeChild(cliente_header);
+  });
 }
 function cashier() {
   const homeButton = document.getElementById("home");
