@@ -5,6 +5,8 @@
 //   const taxElement = document.getElementById("tax");
 //   const payableAmountElement = document.getElementById("payable-amount");
 
+const { response } = require("express");
+
 
 //   let cart = [];
 //   let itemsData = []; // Move itemsData para fora do evento para torná-la global
@@ -165,11 +167,8 @@ document.querySelectorAll(".sidebar button").forEach((button) => {
 
 
 function clientes() {
-  const homeButton = document.getElementById("home");
   const customersButton = document.getElementById("customers");
   customersButton.className = "select";
-  // homeButton.style.border = "none";
-  // customersButton.style.border = "1px solid #FC8019";
 
   const itemsContainer = document.getElementById("items");
   itemsContainer.innerHTML = `
@@ -191,7 +190,7 @@ function clientes() {
         <label for="observacoes">Observações:</label>
         <textarea id="observacoes" name="observacoes" rows="3" placeholder="Alguma observação especial?"></textarea>
 
-        <button onclick="saveClient()">Salvar Cliente</button>
+        <button onclick="salvarCliente()">Salvar Cliente</button>
       </form>
       <span id="success-message" style="display:none;">Cliente adicionado com sucesso!</span>
       <span id="error-message" style="display:none;">Erro ao adicionar cliente!</span>
@@ -199,7 +198,7 @@ function clientes() {
   `;
 }
 
-function saveClient(){
+function SalvarCliente(){
 
   const nome = document.getElementById("nome").value;
   const contacto = document.getElementById("contacto").value; // Corrigido o ID
@@ -227,28 +226,36 @@ function saveClient(){
 }
 
 document.querySelector(".header-btn").addEventListener("click", openModal);
-
+  const cliente = []
 // Função para abrir o modal
 function openModal() {
   const modal = document.getElementById("MainModal");
   const modalContent=document.querySelector(".modal-content")
   modalContent.innerHTML = `
   <span class="close">&times;</span>
-  <form action="/adicionar_cliente" method="POST" class="adicionar_cliente_fatura_form">
+  <form method="POST" class="adicionar_cliente_fatura_form">
     <h2>Adicionar Cliente</h2>
     <label for="nome">Nome:</label>
     <input type="text" id="nome" name="nome" required placeholder="Nome Completo">
 
     <label for="contato">Contato:</label>
-    <input type="tel" id="contato" name="contato" pattern="[0-9]{10,15}" required placeholder="Número de Telefone">
+    <input type="number" id="contato" name="contato" required placeholder="Número de Telefone">
 
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" placeholder="exemplo@email.com">
 
 
-    <button type="submit">Salvar Cliente</button>
+    <button onclick="adicionarClienteTemporarioNaFatura()">Adicionar Cliente</button>
 </form>
   `;
+
+  cliente.push({
+    nome:document.getElementById("nome").value,
+    contato:document.getElementById("contato").value,
+    email:document.getElementById("email").value
+
+  })
+  console.log(cliente)
   modal.style.display = "block";
 
   // Quando o usuário clica fora do modal, fecha-o
@@ -260,8 +267,11 @@ function openModal() {
 
   // Botão de fechar
   document.querySelector(".close").onclick = function () {
-    modal.style.display = "none";
-  };
+    modal.style.display = "none"
+  }
+}
+function adicionarClienteTemporarioNaFatura(){
+  adicionarNaFatura(cliente)
 }
 document
   .querySelector(".search_customers")
@@ -325,7 +335,7 @@ async function searchCustomers() {
     resultsContainer.innerHTML = "<p>Cliente não encontrado</p>";
   }
 }
-
+let clienteNaFatura = null
 function adicionarNaFatura(user) {
   const cliente_header = document.querySelector(".cliente_na_fatura");
   const cart_header = document.querySelector(".cart-header")
@@ -336,7 +346,9 @@ function adicionarNaFatura(user) {
   // Adiciona um ouvinte de evento para remover o item do carrinho
   cliente_header.querySelector('.remove-item').addEventListener('click', () => {
     cliente_header.parentElement.removeChild(cliente_header);
+    clienteNaFatura=null
   });
+  clienteNaFatura=user
 }
 function cashier() {
   const homeButton = document.getElementById("home");
@@ -381,7 +393,15 @@ itemsContainer.innerHTML = `
         </div>
         <div id="purchases-container"></div>
         `;
+        const menu = document.querySelector(".menu")
+        menu.innerHTML = `<button class="menu-btn" id="" onclick="adicionarProdutosNoSistema()">Adicionar Produto</button>
+                <button class="menu-btn" id="breakfast" onclick="adicionarFuncionarioNoSistema()">Adicionar Funcionarios</button>
+                <button class="menu-btn" id="lunch" onclick="verProdutos()">Ver Produtos</button>
+                <button class="menu-btn" id="supper" onclick="verFuncionarios()">Ver Funcionarios</button>
+                <button class="menu-btn" id="desserts" onclick="adicionarADministrador()">Adicionar Administrador</button>
+                `;
 applyFilter();
+
 }
     function showLogin() {
       const itemsContainer = document.getElementById("items");
@@ -404,48 +424,57 @@ applyFilter();
     </div>
             `;
     }
+
+function adicionarProdutosNoSistema(){
+  const itemsContainer = document.getElementById("items");
+  itemsContainer.innerHTML = `
+                <div id="items" class="producst-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button onclick="login()">Entrar</button>
+            </form>
+        </div>
+    </div>
+            `;
+}
 async function login() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
+//   try {
+//     const response = await fetch("http://localhost:3000/api/v1/admin/");
+//     const admins = await response.json();
+//     console.log("Admins fetched:", admins); // Debugging: See what you got from the server
+//     const admin = admins.filter(
+//       (admin) => admin.nome_admin.toLowerCase() === username.toLowerCase() && admin.senha === password
+//     );
 
-  // try {
-  //   const response = await fetch("http://localhost:5500/api/v1/admin", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       username: username,
-  //       password: password,
-  //     }),
-  //   });
-
-  //   console.log("Status:", response.status); // Adicione isso para ver o código de status
-  //   if (response.ok) {
-  //     const data = await response.json();
-  //     console.log(data); // Mantenha isso para ver a estrutura da resposta
-
-  //     if (data.token) {
-  //       reports(); // Troca para a tela do dashboard
-  //     } else {
-  //       alert("Usuário ou senha incorretos!");
-  //     }
-  //   } else {
-  //     console.log("Erro na resposta:", response.statusText); // Adicione isso para mais detalhes
-  //     alert("Erro ao fazer login. Tente novamente.");
-  //   }
-  // } catch (error) {
-  //   console.error("Erro ao fazer login:", error);
-  //   alert(`Erro ao fazer login. Tente novamente. Detalhes: ${error.message}`);
-  // }
-  if(username === "david" && password==="2513" ){
-    reports()
-  }
-  else{
-    alert("Usuário ou senha incorretos!")
-  }
+//     if (admin.length > 0) {
+//       console.log("Login successful, redirecting to reports.");
+//       reports(); // Make sure this function is correctly implemented
+//     } else {
+//       console.log("Login failed, username or password incorrect.");
+//       alert("Usuário ou senha inválidos");
+//     }
+//   } catch (error) {
+//     console.error("Error during login:", error);
+//   alert(error)
+// }
+if(username === "david" && password==="2513"){
+  reports()
 }
-
+else{
+  alert("Usuário ou senha inválidos")
+}
+}
 async function applyFilter() {
   const dayFilter = document.getElementById("day-filter").value;
   const monthFilter = document.getElementById("month-filter").value;
@@ -545,7 +574,8 @@ function logout() {
     `;
 }
 
-async function buy() {
+async function comprar() {
+
     if (cart.length === 0) {
         alert('Carrinho vazio. Nenhum item para enviar.');
         return; // Sai da função se o carrinho estiver vazio
@@ -568,6 +598,11 @@ async function buy() {
             codigo: "SEU_CODIGO_DA_COMPRA", // Substitua 'SEU_CODIGO_DA_COMPRA' pelo código real da compra
             data_compra: new Date().toISOString(), // Usa a data atual como string ISO
             hora_compra: new Date().toLocaleTimeString(), // Usa a hora local atual como string
+            cliente:clienteNaFatura?{
+              nome:clienteNaFatura.nome,
+              email:clienteNaFatura.email,
+              obs:clienteNaFatura.obs
+            }:null,
           }),
         });
 
@@ -575,7 +610,7 @@ async function buy() {
 
         alert('Itens enviados com sucesso!');
         cart = []; // Limpa o carrinho após o envio bem-sucedido
-        // renderCart(); // Atualiza a visualização do carrinho, se necessário
+        renderCart(); // Atualiza a visualização do carrinho, se necessário
     } catch (error) {
         console.error('Erro ao enviar os itens:', error);
     }
