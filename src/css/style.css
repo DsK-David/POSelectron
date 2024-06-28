@@ -348,7 +348,6 @@ body {
 #cart-items {
     overflow-y: scroll;
 }
-
 .cart-item {
   display: flex;
   justify-content: space-between;
@@ -490,6 +489,51 @@ body {
     text-align: center;
     color: #333;
 }
+#add-client-btn {
+  background-color: var(--main--button--color); /* Cor de fundo */
+  color: var(--main--color); /* Cor do texto */
+  border: none; /* Remove a borda padrão */
+  padding: 8px 10px; /* Ajusta o padding para reduzir o tamanho */
+  font-size: 14px; /* Ajusta o tamanho da fonte para um tamanho menor */
+  border-radius: 5px; /* Arredonda os cantos do botão */
+  cursor: pointer; /* Muda o cursor para indicar que é clicável */
+  transition: background-color 0.3s; /* Efeito de transição suave ao passar o mouse */
+  
+}
+
+#add-client-btn:hover {
+  background-color: var(--main--hover--button--color); /* Muda a cor de fundo ao passar o mouse */
+}
+  #customer-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#customer-list th, #customer-list td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+#customer-list th {
+    background-color: #f4f4f4;
+}
+
+#customer-list td button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+#customer-list .edit-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+#customer-list .delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
 /* Container for the filter controls */
 #filter-controls {
   display: flex;
@@ -623,10 +667,6 @@ body {
   background: var(--main--hover--button--color);
 }
 
-button:hover {
-    background-color: #45a049;
-}
-
 
 /* Button styling
 button {
@@ -643,137 +683,5 @@ button:hover {
 } */
 
 /* Estilos para a página de login do administrador */
-.admin_container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f0f2f5; /* Cor de fundo suave */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
 
-.admin_container h1 {
-  margin-bottom: 30px;
-  color: #333; /* Cor do texto para o título */
-  font-size: 2.5em; /* Tamanho do texto do título */
-  text-align: center;
-}
 
-.admin_container input[type="text"],
-.admin_container input[type="password"] {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc; /* Cor da borda dos inputs */
-  border-radius: 5px; /* Bordas arredondadas */
-  width: 300px; /* Largura dos inputs */
-  font-size: 16px; /* Tamanho do texto dentro dos inputs */
-  outline: none; /* Remove o contorno padrão */
-  transition: border-color 0.3s ease; /* Transição suave para a cor da borda */
-}
-
-.admin_container input[type="text"]:focus,
-.admin_container input[type="password"]:focus {
-  border-color: #007bff; /* Cor da borda ao focar */
-}
-
-.admin_container button {
-  padding: 15px 20px;
-  background-color: #007bff; /* Cor de fundo do botão */
-  color: #fff; /* Cor do texto do botão */
-  border: none; /* Remove a borda */
-  border-radius: 5px; /* Bordas arredondadas */
-  cursor: pointer; /* Cursor de mão ao passar o mouse */
-  font-size: 16px; /* Tamanho do texto do botão */
-  transition: background-color 0.3s ease; /* Transição suave para a cor de fundo */
-  margin-top: 20px; /* Espaçamento acima do botão */
-}
-
-.admin_container button:hover {
-  background-color: #0056b3; /* Cor de fundo ao passar o mouse */
-}
-
-nav {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  background-color: #fff; /* Cor de fundo da barra de navegação */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave na barra de navegação */
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
-.theme-icon {
-  cursor: pointer;
-  font-size: 24px;
-  color: #333; /* Cor dos ícones */
-}
-
-.theme-icon-dark,
-.theme-icon-light {
-  display: inline-block;
-  margin-right: 10px; /* Espaçamento entre os ícones */
-}
-
-/* Estilos para o botão de tema */
-#theme-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-}
-
-/* Estilos para o tema escuro */
-body.dark-theme {
-  --background--color: #2C3E50; /* Azul Marinho */
-  --secundary--color: #34495E; /* Cinza Carvão */
-  --main--color: #fff;
-  --text--color: #fff;
-}
-
-body.dark-theme.admin_container {
-  background-color: var(--background--color);
-}
-
-body.dark-theme.admin_container input[type="text"],
-body.dark-theme.admin_container input[type="password"] {
-  background-color: #34495E;
-  color: var(--main--color);
-  border-color: var(--main--color);
-}
-
-body.dark-theme.admin_container button {
-  background-color: #1ABC9C; /* Verde Esmeralda */
-  color: var(--background--color);
-}
-
-body.dark-theme.admin_container button:hover {
-  background-color: #16A085; /* Verde Escuro */
-}
-
-/* Estilos para o tema escuro */
-body.dark-theme {
-  background-color: #2C3E50; /* Cor de fundo para tema escuro */
-}
-
-body.dark-theme.admin_container h1 {
-  color: #fff; /* Cor do texto para o título em tema escuro */
-}
-
-body.dark-theme.admin_container input[type="text"],
-body.dark-theme.admin_container input[type="password"] {
-  background-color: #34495E; /* Cor de fundo dos inputs em tema escuro */
-  border-color: #fff; /* Cor da borda dos inputs em tema escuro */
-}
-
-body.dark-theme.admin_container button {
-  background-color: #1ABC9C; /* Cor de fundo do botão em tema escuro */
-}
-
-body.dark-theme.admin_container button:hover {
-  background-color: #16A085; /* Cor de fundo do botão ao passar o mouse em tema escuro */
-}
