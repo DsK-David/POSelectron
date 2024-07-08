@@ -1,132 +1,98 @@
-// home.js
-
 let cart = [];
 let itemsData = [];
 
-async function fetchItemsData() {
-  try {
-    const response = await fetch("http://localhost:5500/api/v1/produtos");
-    itemsData = await response.json();
-  } catch (error) {
-    console.error("Erro ao buscar dados da API:", error);
-  }
-}
-
-async function renderItems() {
-  await fetchItemsData();
+function home() {
   const itemsContainer = document.getElementById("items");
-  itemsContainer.innerHTML = "";
-  itemsData.forEach((item) => {
-    const itemDiv = document.createElement("div");
-    itemDiv.className = "item";
-    itemDiv.innerHTML = `<img src="${item.imagem}" alt="${item.nome}">
-      <br><span>${item.nome}</span>
-      <br><strong>$${item.preco}</strong>`;
-    itemDiv.onclick = () => addToCart(item);
-    itemsContainer.appendChild(itemDiv);
-  });
-}
-
-function addToCart(item) {
-  cart.push(item);
-  renderCart();
-}
-
-function renderCart() {
+  const homeButton = document.getElementById("home");
+  const customersButton = document.getElementById("customers");
   const cartItemsContainer = document.getElementById("cart-items");
-  cartItemsContainer.innerHTML = "";
-  let subtotal = 0;
-  cart.forEach((item, index) => {
-    const cartItemDiv = document.createElement("div");
-    cartItemDiv.className = "cart-item";
-    cartItemDiv.innerHTML = `
-      <div class="item-details">
-        <span>1</span> ${item.nome}
-        <span class="item-price">$${item.preco}</span>
-      </div>
-      <button class="remove-item" data-index="${index}">✕</button>
-    `;
-    cartItemDiv
-      .querySelector(".remove-item")
-      .addEventListener("click", () => removeCartItem(index));
-    cartItemsContainer.appendChild(cartItemDiv);
-    subtotal += item.preco;
-    scrollToBottom(cartItemsContainer)
-  });
-
   const subtotalElement = document.getElementById("subtotal");
   const taxElement = document.getElementById("tax");
   const payableAmountElement = document.getElementById("payable-amount");
+  // homeButton.style.border="1px solid #FC8019"
+  // customersButton.style.border = "none";
+  // Move itemsData para fora do evento para torná-la global
 
-  const tax = subtotal * 0.225;
-  const payableAmount = subtotal - tax;
-
-  subtotalElement.innerText = subtotal.toFixed(2);
-  taxElement.innerText = tax.toFixed(2);
-  payableAmountElement.innerText = payableAmount.toFixed(2);
-}
-
-function removeCartItem(index) {
-  cart.splice(index, 1);
-  renderCart();
-}
-
-function scrollToBottom(container) {
-  container.scrollTop = container.scrollHeight;
-}
-let clienteNaFatura = null
-function adicionarNaFatura(user) {
-  const cliente_header = document.querySelector(".cliente_na_fatura");
-  const cart_header = document.querySelector(".cart-header")
-  cliente_header.innerHTML = `
-    <span>${user.nome}</span> - <span>${user.email}</span> - <span>${user.obs}</span>
-    <button class="remove-item">X</button>`;
-
-  // Adiciona um ouvinte de evento para remover o item do carrinho
-  cliente_header.querySelector('.remove-item').addEventListener('click', () => {
-    cliente_header.parentElement.removeChild(cliente_header);
-    clienteNaFatura=null
-  });
-  clienteNaFatura=user
-}
-async function comprar(){
-    if (cart.length === 0) {
-        alert('Carrinho vazio. Nenhum item para enviar.');
-        return; // Sai da função se o carrinho estiver vazio
-    }
-
-    const itemsToSend = cart.map(item => ({
-        nome: item.nome,
-        preco: item.preco
-    }))
-
+  async function fetchItemsData() {
     try {
-        const response = await fetch("http://localhost:5500/api/v1/compra", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            itens: JSON.stringify(itemsToSend),
-            total: cart.reduce((acc, item) => acc + item.preco, 0), // Supondo que 'preco' é o preço de cada item
-            codigo: "SEU_CODIGO_DA_COMPRA", // Substitua 'SEU_CODIGO_DA_COMPRA' pelo código real da compra
-            data_compra: new Date().toISOString(), // Usa a data atual como string ISO
-            hora_compra: new Date().toLocaleTimeString(), // Usa a hora local atual como string
-            cliente:clienteNaFatura?{
-              nome:clienteNaFatura.nome,
-              email:clienteNaFatura.email,
-              obs:clienteNaFatura.obs
-            }:null,
-          }),
-        });
-
-        if (!response.ok) throw new Error('Falha ao enviar os itens para checkout');
-
-        alert('Itens enviados com sucesso!');
-        cart = []; // Limpa o carrinho após o envio bem-sucedido
-        renderCart(); // Atualiza a visualização do carrinho, se necessário
+      const response = await fetch("http://localhost:5500/api/v1/produtos"); // Substitua pela URL da sua API
+      itemsData = await response.json(); // Atualiza a variável global itemsData
     } catch (error) {
-        console.error('Erro ao enviar os itens:', error);
+      console.error("Erro ao buscar dados da API:", error);
     }
+  }
+
+  async function renderItems() {
+    await fetchItemsData(); // Garante que itemsData seja preenchida antes de renderizar os itens
+    itemsContainer.innerHTML = "";
+    itemsData.forEach((item) => {
+      const itemDiv = document.createElement("div");
+      itemDiv.className = "item";
+      itemDiv.innerHTML = `<img src="${item.imagem}" alt="${item.nome}">
+      <br><span>${item.nome}</span>
+      <br><strong>$${item.preco}</strong>`;
+      itemDiv.onclick = () => addToCart(item); // Passa o objeto item diretamente
+      itemsContainer.appendChild(itemDiv);
+    });
+  }
+
+  function addToCart(item) {
+    cart.push(item); // Adiciona o item diretamente ao carrinho
+    renderCart();
+    scrollToBottom(cartItemsContainer);
+  }
+  document
+    .getElementById("cart-items")
+    .addEventListener("click", function (event) {
+      if (event.target.classList.contains("remove-item")) {
+        const index = parseInt(event.target.getAttribute("data-index"));
+        if (!isNaN(index)) {
+          cart.splice(index, 1); // Remove o item do carrinho
+          renderCart(); // Re-renderiza o carrinho após a remoção
+        }
+      }
+    });
+  function renderCart() {
+    cartItemsContainer.innerHTML = "";
+
+    let subtotal = 0;
+    cart.forEach((item, index) => {
+      const cartItemDiv = document.createElement("div");
+      cartItemDiv.className = "cart-item";
+      cartItemDiv.innerHTML = `
+      <div class="item-details">
+          <span>1</span> ${item.nome}
+          <span class="item-price">$${item.preco}</span>
+        </div>
+        <button class="remove-item" data-index="${index}"">✕</button>
+        `;
+
+      cartItemsContainer.appendChild(cartItemDiv);
+      subtotal += item.preco;
+    });
+    const tax = subtotal * 0.225;
+    const payableAmount = subtotal - tax;
+
+    subtotalElement.innerText = subtotal.toFixed(2);
+    taxElement.innerText = tax.toFixed(2);
+    payableAmountElement.innerText = payableAmount.toFixed(2);
+
+    scrollToBottom(cartItemsContainer);
+  }
+
+  function scrollToBottom(container) {
+    container.scrollTop = container.scrollHeight;
+  }
+  // Chama renderItems após o evento DOMContentLoaded
+  renderItems();
 }
-export { renderItems, addToCart, renderCart, scrollToBottom,comprar };
+document.querySelectorAll(".sidebar button").forEach((button) => {
+  button.addEventListener("click", function () {
+    // Remove a classe 'active' de todos os botões
+    document
+      .querySelectorAll(".sidebar button")
+      .forEach((btn) => btn.classList.remove("active"));
+    // Adiciona a classe 'active' ao botão clicado
+    this.classList.add("active");
+  });
+});

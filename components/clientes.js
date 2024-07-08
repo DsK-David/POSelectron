@@ -1,43 +1,36 @@
-// clientes.js
-
-import { renderCart, scrollToBottom } from "./home.js";
-
 function clientes() {
-  const customersButton = document.getElementById("clients");
-  customersButton.className = "active";
+  const customersButton = document.getElementById("customers");
+  customersButton.className = "select";
 
   const itemsContainer = document.getElementById("items");
+  // Adiciona o botão de adicionar clientes no canto superior direito
   itemsContainer.innerHTML = `
-    <div>
-      <button id="add-client-btn">Adicionar Cliente</button>
-      <div id="customer-list">
-        <h2>Lista de Clientes</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Telefone</th>
-              <th>Endereço</th>
-              <th>Observações</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="customer-table-body">
-            <!-- Customers will be populated here by JavaScript -->
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <div>
+    <button id="add-client-btn" onclick="abrirModalDeAdicionarCliente()">Adicionar Cliente</button>
+   <div id="customer-list">
+                <h2>Lista de Clientes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Endereço</th>
+                            <th>Observações</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customer-table-body">
+                        <!-- Customers will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            </div>
   `;
 
-  // Adicionar event listener
-  const addButton = document.getElementById("add-client-btn");
-  addButton.addEventListener("click", abrirModalDeAdicionarCliente);
-
+  // Restante do código da função...
   loadCustomers();
 }
-
 function abrirModalDeAdicionarCliente() {
   const modal = document.getElementById("MainModal");
   const modalContent = document.querySelector(".modal-content");
@@ -63,17 +56,18 @@ function abrirModalDeAdicionarCliente() {
 
   modal.style.display = "block";
 
+  // Adiciona funcionalidade ao botão de fechar do modal
   document.querySelector(".close").addEventListener("click", function () {
     modal.style.display = "none";
   });
 
+  // Fecha o modal se clicar fora dele
   window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
     }
   };
 }
-
 function loadCustomers() {
   const apiUrl = "http://localhost:3000/api/v1";
   fetch(`${apiUrl}/clientes`)
@@ -84,62 +78,169 @@ function loadCustomers() {
       data.forEach((customer) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${customer.nome}</td>
-          <td>${customer.email}</td>
-          <td>${customer.telefone}</td>
-          <td>${customer.endereco}</td>
-          <td>${customer.obs}</td>
-          <td>
-            <button class="edit-btn" onclick="editCustomer(${customer.ID})"><i class='bx bx-edit-alt'></i></button>
-            <button class="delete-btn" onclick="deleteCustomer(${customer.ID})"><i class='bx bx-trash'></i></button>
-          </td>
-        `;
+                    <td>${customer.nome}</td>
+                    <td>${customer.email}</td>
+                    <td>${customer.telefone}</td>
+                    <td>${customer.endereco}</td>
+                    <td>${customer.obs}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editCustomer(${customer.ID})"><i class='bx bx-edit-alt'></i></button>
+                        <button class="delete-btn" onclick="deleteCustomer(${customer.ID})"><i class='bx bx-trash'></i></button>
+                    </td>
+                `;
         customerTableBody.appendChild(row);
       });
     })
     .catch((error) => console.error("Erro ao carregar clientes:", error));
 }
-
-function salvarCliente() {
-  const apiUrl = "http://localhost:3000/api/v1";
+function SalvarCliente() {
   const nome = document.getElementById("nome").value;
-  const contacto = document.getElementById("contacto").value;
+  const contacto = document.getElementById("contacto").value; // Corrigido o ID
   const email = document.getElementById("email").value;
   const endereco = document.getElementById("endereco").value;
   const observacoes = document.getElementById("observacoes").value;
 
-  const customer = {
-    nome,
-    telefone: contacto,
-    email,
-    endereco,
-    obs: observacoes,
-  };
-
-  fetch(`${apiUrl}/clientes`, {
+  fetch("http://localhost:3000/api/v1/clientes", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(customer),
+    body: JSON.stringify({
+      nome: nome,
+      telefone: contacto,
+      email: email,
+      endereco: endereco,
+      obs: observacoes,
+    }),
   })
     .then((response) => response.json())
-    .then((data) => {
-      document.getElementById("success-message").style.display = "block";
-      setTimeout(() => {
-        document.getElementById("success-message").style.display = "none";
-      }, 3000);
-      loadCustomers();
-    })
-    .catch((error) => {
-
-      document.getElementById("error-message").style.display = "block";
-      document.getElementById("error-message").innerHTML=`<span>${error}</span>`
-      setTimeout(() => {
-        document.getElementById("error-message").style.display = "none";
-      }, 3000);
-      console.error("Erro ao adicionar cliente:", error);
-    });
+    .then((data) => console.log(data))
+    .catch((error) => console.error("erro", error));
 }
 
-export { clientes, abrirModalDeAdicionarCliente, loadCustomers, salvarCliente };
+document.querySelector(".header-btn").addEventListener("click", openModal);
+const cliente = [];
+// Função para abrir o modal
+function openModal() {
+  const modal = document.getElementById("MainModal");
+  const modalContent = document.querySelector(".modal-content");
+  modalContent.innerHTML = `
+  <span class="close">&times;</span>
+  <form method="POST" class="adicionar_cliente_fatura_form">
+    <h2>Adicionar Cliente</h2>
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required placeholder="Nome Completo">
+
+    <label for="contato">Contato:</label>
+    <input type="number" id="contato" name="contato" required placeholder="Número de Telefone">
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="exemplo@email.com">
+
+
+    <button onclick="adicionarClienteTemporarioNaFatura()">Adicionar Cliente</button>
+</form>
+  `;
+
+  cliente.push({
+    nome: document.getElementById("nome").value,
+    contato: document.getElementById("contato").value,
+    email: document.getElementById("email").value,
+  });
+  console.log(cliente);
+  modal.style.display = "block";
+
+  // Quando o usuário clica fora do modal, fecha-o
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // Botão de fechar
+  document.querySelector(".close").onclick = function () {
+    modal.style.display = "none";
+  };
+}
+function adicionarClienteTemporarioNaFatura() {
+  adicionarNaFatura(cliente);
+}
+document
+  .querySelector(".search_customers")
+  .addEventListener("click", openSearchCustomersModal);
+
+function openSearchCustomersModal() {
+  const modal = document.getElementById("MainModal");
+  const modalContent = document.querySelector(".modal-content");
+  modalContent.innerHTML = `
+  <div class="buscar_cliente_fatura_form">
+    <span class="close">&times;</span>
+    <h2>Procurar Cliente</h2>
+    <label for="nome">Nome:</label>
+    <input id="search-input" type="text" name="nome" required placeholder="Nome Completo">
+    <button id="search">Procurar Cliente</button>
+    <div id="search-results"></div>
+    </div>
+  `;
+  modal.style.display = "block";
+
+  // Quando o usuário clica fora do modal, fecha-o
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // Botão de fechar
+  document.querySelector(".close").onclick = function () {
+    modal.style.display = "none";
+  };
+
+  // Adiciona o event listener para o botão de pesquisa após a criação do modal
+  document.getElementById("search").addEventListener("click", searchCustomers);
+}
+async function searchCustomers() {
+  const query = document.getElementById("search-input").value.toLowerCase();
+  const response = await fetch("http://localhost:3000/api/v1/clientes");
+  const users = await response.json();
+
+  const results = users.filter(
+    (user) =>
+      user.nome.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query)
+  );
+
+  const resultsContainer = document.getElementById("search-results");
+  resultsContainer.innerHTML = "";
+
+  if (results.length > 0) {
+    results.forEach((user) => {
+      const userElement = document.createElement("p");
+      userElement.innerHTML = `<label>Name:</label> 
+      <span>${user.nome}</span>,<span> Email: ${user.email}</span>,
+      OBS: ${user.obs}</span>
+       <button class="add_fatura">Adicionar</button>`;
+      userElement
+        .querySelector(".add_fatura")
+        .addEventListener("click", () => adicionarNaFatura(user));
+      resultsContainer.appendChild(userElement);
+    });
+  } else {
+    resultsContainer.innerHTML = "<p>Cliente não encontrado</p>";
+  }
+}
+let clienteNaFatura = null;
+function adicionarNaFatura(user) {
+  const cliente_header = document.querySelector(".cliente_na_fatura");
+  const cart_header = document.querySelector(".cart-header");
+  cliente_header.innerHTML = `
+    <span>${user.nome}</span> - <span>${user.email}</span> - <span>${user.obs}</span>
+    <button class="remove-item">X</button>`;
+
+  // Adiciona um ouvinte de evento para remover o item do carrinho
+  cliente_header.querySelector(".remove-item").addEventListener("click", () => {
+    cliente_header.parentElement.removeChild(cliente_header);
+    clienteNaFatura = null;
+  });
+  clienteNaFatura = user;
+}
