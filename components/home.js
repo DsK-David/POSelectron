@@ -1,5 +1,7 @@
 let cart = [];
 let itemsData = [];
+let entidadesData = []
+let categoriaData = []
 
 function home() {
   const itemsContainer = document.getElementById("items");
@@ -15,27 +17,85 @@ function home() {
 
   async function fetchItemsData() {
     try {
-      const response = await fetch("http://localhost:5500/api/v1/produtos"); // Substitua pela URL da sua API
-      itemsData = await response.json(); // Atualiza a variável global itemsData
+      // const response = await fetch("http://localhost:5500/api/v1/produtos"); // Substitua pela URL da sua API
+      // const response = await fetch(
+      //   "http://faturaapi.serveo.net/faturacao-api/web/index.php?r=product/by-category&entidade_id=A56CA66F-54DB-4953-88FE-47C8C7D653B3&category_id=76a4694f-e266-37fa-0795-d3cb3bf0c896"
+      // );
+      // const response = await fetch(
+      //   "http://faturaapi.serveo.net/faturacao-api/web/index.php?r=product/all"
+      // );
+      const entidadeID = localStorage.getItem("entidadeID");
+      const id = JSON.parse(entidadeID);
+      const produtosResponse = await fetch(
+        `http://localhost:3000/api/v1/produto/${id}`
+      )
+      itemsData = await produtosResponse.json(); // Atualiza a variável global itemsData
+   
     } catch (error) {
       console.error("Erro ao buscar dados da API:", error);
     }
   }
-
+async function fetchEntidadeData(){
+  try {
+    
+    const entidadeID = localStorage.getItem("entidadeID");
+    const id = JSON.parse(entidadeID);
+    const entidadesResponse = await fetch(
+      `http://localhost:3000/api/v1/entidade/${id}`
+    );
+    entidadesData = await entidadesResponse.json();
+         
+  } catch (error) {
+     console.error("Erro ao buscar dados da API:", error);
+  }
+}
   async function renderItems() {
     await fetchItemsData(); // Garante que itemsData seja preenchida antes de renderizar os itens
     itemsContainer.innerHTML = "";
     itemsData.forEach((item) => {
       const itemDiv = document.createElement("div");
       itemDiv.className = "item";
-      itemDiv.innerHTML = `<img src="${item.imagem}" alt="${item.nome}">
-      <br><span>${item.nome}</span>
-      <br><strong>$${item.preco}</strong>`;
+      itemDiv.innerHTML = `
+      <img src="${item.FOTO_PERFIL}" alt="${item.FOTO_PERFIL}">
+      <br><span>${item.DESIG}</span>
+    
+      <br><strong>$${item.Preco_venda}</strong>`;
       itemDiv.onclick = () => addToCart(item); // Passa o objeto item diretamente
       itemsContainer.appendChild(itemDiv);
     });
   }
-
+  async function renderEntidadesData(){
+   await fetchEntidadeData()
+      const entidadeContainer = document.getElementById("entidade");
+      entidadesData.forEach((entidades) => {
+        entidadeContainer.innerHTML = `<h1>${entidades.DESIG}</h1>
+      <img src="${entidades.FOTO_EMPRESA}">
+      `;
+      });
+  }
+async function fetchCategoriaData(){
+try {
+  const entidadeID = localStorage.getItem("entidadeID");
+  const id = JSON.parse(entidadeID);
+   const categoriaReponse = await fetch(
+     `http://localhost:3000/api/v1/categoria/${id}`
+   );
+   categoriaData = await categoriaReponse.json();
+} catch (error) {
+   console.error("Erro ao buscar dados da API:", error);
+}
+}
+async function renderCategoria() {
+  await fetchCategoriaData();
+  const menu = document.getElementById("categoria-container");
+  menu.innerHTML = "";
+  categoriaData.forEach((categoria) => {
+    const categoriadiv = document.createElement("div");
+    categoriadiv.className = "menu-btn";
+    categoriadiv.innerText = categoria.DESIG;
+    menu.appendChild(categoriadiv);
+  });
+}
   function addToCart(item) {
     cart.push(item); // Adiciona o item diretamente ao carrinho
     renderCart();
@@ -61,21 +121,20 @@ function home() {
       cartItemDiv.className = "cart-item";
       cartItemDiv.innerHTML = `
       <div class="item-details">
-          <span>1</span> ${item.nome}
-          <span class="item-price">$${item.preco}</span>
+          <span></span> ${item.DESIG}
+          <br>
+          <span class="item-price">$${item.Preco_venda}</span>
         </div>
         <button class="remove-item" data-index="${index}"">✕</button>
         `;
 
       cartItemsContainer.appendChild(cartItemDiv);
-      subtotal += item.preco;
+      subtotal += item.Preco_venda;
     });
-    const tax = subtotal * 0.225;
-    const payableAmount = subtotal - tax;
+    
+    const payableAmount = subtotal 
 
-    subtotalElement.innerText = subtotal.toFixed(2);
-    taxElement.innerText = tax.toFixed(2);
-    payableAmountElement.innerText = payableAmount.toFixed(2);
+    payableAmountElement.innerText = payableAmount;
 
     scrollToBottom(cartItemsContainer);
   }
@@ -85,6 +144,8 @@ function home() {
   }
   // Chama renderItems após o evento DOMContentLoaded
   renderItems();
+  renderEntidadesData()
+  renderCategoria()
 }
 document.querySelectorAll(".sidebar button").forEach((button) => {
   button.addEventListener("click", function () {
@@ -96,3 +157,9 @@ document.querySelectorAll(".sidebar button").forEach((button) => {
     this.classList.add("active");
   });
 });
+  async function buscarProdutoPorCodigoDeBarra() {
+    const barcode_input = document.getElementById("barcode").value;
+    if (barcode_input.lenght() > 4) {
+     const produtoBarCodeResponde= await fetch(`http://localhost:3000/api/v1/produto/barcode/${barcode_input}`);
+    }
+  }

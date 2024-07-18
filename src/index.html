@@ -38,7 +38,9 @@
   </div>
 </div>
             <div class="header">
-                <h1>SimpliVenda</h1>
+                <div class="entidade_container" id="entidade">
+
+                </div>
                 <div class="search_container">
                     <input type="search" name="" id="">
                     <button><i class='bx bx-search-alt-2'></i></button>
@@ -46,13 +48,13 @@
                 <button class="wireless_widget"><span><i class='bx bx-wifi'></i></span></button>
 
             </div>
-            <div class="menu">
-                <button class="menu-btn" id="starters">Starters</button>
+            <div class="menu" id="categoria-container">
+                <!-- <button class="menu-btn" id="starters">Starters</button>
                 <button class="menu-btn" id="breakfast">Breakfast</button>
                 <button class="menu-btn" id="lunch">Lunch</button>
                 <button class="menu-btn" id="supper">Supper</button>
                 <button class="menu-btn" id="desserts">Desserts</button>
-                <button class="menu-btn" id="beverages">Beverages</button>
+                <button class="menu-btn" id="beverages">Beverages</button> -->
             </div>
             <div class="content">
                 <div class="items" id="items">
@@ -65,6 +67,7 @@
         <button class="icon-btn">+</button>
         <button class="icon-btn">⧉</button>
         <button class="icon-btn search_customers">🔍</button>
+        <input type="number" class="barcode_input" id="barcode" placeholder="Codigo de Barra" ><button class="icon-btn search_customers">🔍</button>
         <div class="cliente_na_fatura"></div>
       </div>
       </div>
@@ -73,8 +76,7 @@
 
                     </div>
                     <div class="cart-total">
-                        <div>Subtotal: $<span id="subtotal">0.00</span></div>
-                        <div>Tax: $<span id="tax">0.00</span></div>
+                       
                         <div>Pagamento total: $<span id="payable-amount">0.00</span></div>
                     </div>
                     <button id="hold-cart">Fechar Carinho</button>

@@ -1,0 +1,6 @@
+GET  http://faturaapi.serveo.net/faturacao-api/web/index.php?r=product/by-category&entidade_id=A56CA66F-54DB-4953-88FE-47C8C7D653B3&category_id=76a4694f-e266-37fa-0795-d3cb3bf0c896
+###
+GET http://faturaapi.serveo.net/faturacao-api/web/index.php?r=product/all
+
+nome produto- DESIG
+preco produto- Preco_venda

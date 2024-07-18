@@ -13,7 +13,8 @@ function createWindow() {
     },
   });
 
-  win.loadFile(path.join(__dirname, "src", "index.html"));
+  win.loadFile(path.join(__dirname, "src", "login.html"));
+    // win.loadFile(path.join(__dirname, "src", "index.html"));
 
   ipcMain.on("show-notification", (event, { title, body }) => {
     new Notification({ title, body }).show();

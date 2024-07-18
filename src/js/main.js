@@ -63,6 +63,7 @@ function logout() {
     <h1>Logout bye bye</h1>
     
     `;
+    location.href='login.html'
 }
 
 async function comprar() {
@@ -106,4 +107,22 @@ async function comprar() {
   } catch (error) {
     console.error("Erro ao enviar os itens:", error);
   }
+}
+
+let userData = []
+ async function logar(){
+  const username = document.getElementById("username").value
+  const password = document.getElementById("password").value
+  const loginResponse = await fetch(
+   ` http://localhost:3000/api/v1/auth/${username}/${password}`
+  );
+  const loginData = await loginResponse.json()
+  loginData.forEach((data)=>{
+    alert(`ok logado como ${data.USERNAME} `)
+    const entidadeID = data.Entidade_ID
+    userData.push(entidadeID)
+    localStorage.setItem("entidadeID",JSON.stringify(userData))
+    location.href="index.html"
+  })
+   
 }

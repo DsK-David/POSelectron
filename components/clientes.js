@@ -1,3 +1,10 @@
+const entidadeID = localStorage.getItem("entidadeID");
+const id = JSON.parse(entidadeID);
+function mostrarMessage(message) {
+  const success_message = document.getElementById("success-message");
+  success_message.innerTEXT = message;
+}
+
 function clientes() {
   const customersButton = document.getElementById("customers");
   customersButton.className = "select";
@@ -14,9 +21,10 @@ function clientes() {
                         <tr>
                             <th>Nome</th>
                             <th>Email</th>
+                            <th>Codigo</th>
+                            <th>NIF</th>
                             <th>Telefone</th>
-                            <th>Endereço</th>
-                            <th>Observações</th>
+                            <th>Imposto</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -29,7 +37,7 @@ function clientes() {
   `;
 
   // Restante do código da função...
-  loadCustomers();
+  MostrarClientes();
 }
 function abrirModalDeAdicionarCliente() {
   const modal = document.getElementById("MainModal");
@@ -48,7 +56,7 @@ function abrirModalDeAdicionarCliente() {
       <textarea id="endereco" name="endereco" rows="3" placeholder="Digite o endereço completo..."></textarea>
       <label for="observacoes">Observações:</label>
       <textarea id="observacoes" name="observacoes" rows="3" placeholder="Alguma observação especial?"></textarea>
-      <button type="button" onclick="salvarCliente()">Salvar Cliente</button>
+      <button type="button" class="salvarClienteBtn" onclick=SalvarCliente()>Salvar Cliente</button>
     </form>
     <span id="success-message" style="display:none;">Cliente adicionado com sucesso!</span>
     <span id="error-message" style="display:none;">Erro ao adicionar cliente!</span>
@@ -68,31 +76,6 @@ function abrirModalDeAdicionarCliente() {
     }
   };
 }
-function loadCustomers() {
-  const apiUrl = "http://localhost:3000/api/v1";
-  fetch(`${apiUrl}/clientes`)
-    .then((response) => response.json())
-    .then((data) => {
-      const customerTableBody = document.getElementById("customer-table-body");
-      customerTableBody.innerHTML = "";
-      data.forEach((customer) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-                    <td>${customer.nome}</td>
-                    <td>${customer.email}</td>
-                    <td>${customer.telefone}</td>
-                    <td>${customer.endereco}</td>
-                    <td>${customer.obs}</td>
-                    <td>
-                        <button class="edit-btn" onclick="editCustomer(${customer.ID})"><i class='bx bx-edit-alt'></i></button>
-                        <button class="delete-btn" onclick="deleteCustomer(${customer.ID})"><i class='bx bx-trash'></i></button>
-                    </td>
-                `;
-        customerTableBody.appendChild(row);
-      });
-    })
-    .catch((error) => console.error("Erro ao carregar clientes:", error));
-}
 function SalvarCliente() {
   const nome = document.getElementById("nome").value;
   const contacto = document.getElementById("contacto").value; // Corrigido o ID
@@ -100,7 +83,7 @@ function SalvarCliente() {
   const endereco = document.getElementById("endereco").value;
   const observacoes = document.getElementById("observacoes").value;
 
-  fetch("http://localhost:3000/api/v1/clientes", {
+  fetch("http://localhost:3300/api/v1/clientes", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -114,14 +97,57 @@ function SalvarCliente() {
     }),
   })
     .then((response) => response.json())
+    .then((data) => {
+      mostrarMessage(data.message);
+    })
+    .catch((error) => console.error("erro", error));
+  MostrarClientes();
+}
+function MostrarClientes() {
+  const apiUrl = `http://localhost:3000/api/v1`;
+  fetch(`${apiUrl}/cliente/${id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const customerTableBody = document.getElementById("customer-table-body");
+      customerTableBody.innerHTML = "";
+      data.forEach((customer) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+                    <td>${customer.DESIG}</td>
+                    <td>${customer.EMAIL}</td>
+                    <td>${customer.CODIGO}</td>
+                    <td>${customer.NIF}</td>
+                    <td>${customer.TELEFONE}</td>
+                    <td>${customer.APLICAR_IMPOSTOS}</td>
+                   
+                    <td>
+                        <button class="edit-btn" onclick="editarCliente(${customer.ID})"><i class='bx bx-edit-alt'></i></button>
+                        <button class="delete-btn" onclick="deletarCliente(${customer.ID})"><i class='bx bx-trash'></i></button>
+                    </td>
+                `;
+        customerTableBody.appendChild(row);
+      });
+    })
+    .catch((error) => console.error("Erro ao carregar clientes:", error));
+}
+function deletarCliente(id) {
+  const apiUrl = "http://localhost:3300/api/v1";
+  fetch(`${apiUrl}/clientes/${id}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
     .then((data) => console.log(data))
     .catch((error) => console.error("erro", error));
+  MostrarClientes();
 }
+// document.querySelector(".salvarClienteBtn").addEventListener("click", SalvarCliente);
 
-document.querySelector(".header-btn").addEventListener("click", openModal);
+document
+  .querySelector(".header-btn")
+  .addEventListener("click", abrirModaldeAdicionarClienteTemporario);
 const cliente = [];
 // Função para abrir o modal
-function openModal() {
+function abrirModaldeAdicionarClienteTemporario() {
   const modal = document.getElementById("MainModal");
   const modalContent = document.querySelector(".modal-content");
   modalContent.innerHTML = `
@@ -167,9 +193,9 @@ function adicionarClienteTemporarioNaFatura() {
 }
 document
   .querySelector(".search_customers")
-  .addEventListener("click", openSearchCustomersModal);
+  .addEventListener("click", abrirModalDeBuscarCliente);
 
-function openSearchCustomersModal() {
+function abrirModalDeBuscarCliente() {
   const modal = document.getElementById("MainModal");
   const modalContent = document.querySelector(".modal-content");
   modalContent.innerHTML = `
@@ -197,17 +223,17 @@ function openSearchCustomersModal() {
   };
 
   // Adiciona o event listener para o botão de pesquisa após a criação do modal
-  document.getElementById("search").addEventListener("click", searchCustomers);
+  document.getElementById("search").addEventListener("click", buscarClientes);
 }
-async function searchCustomers() {
+async function buscarClientes() {
   const query = document.getElementById("search-input").value.toLowerCase();
-  const response = await fetch("http://localhost:3000/api/v1/clientes");
+  const response = await fetch(`http://localhost:3000/api/v1/cliente/${id}`);
   const users = await response.json();
 
   const results = users.filter(
     (user) =>
-      user.nome.toLowerCase().includes(query) ||
-      user.email.toLowerCase().includes(query)
+      user.DESIG.toLowerCase().includes(query) ||
+      user.EMAIL.toLowerCase().includes(query)
   );
 
   const resultsContainer = document.getElementById("search-results");
@@ -217,8 +243,8 @@ async function searchCustomers() {
     results.forEach((user) => {
       const userElement = document.createElement("p");
       userElement.innerHTML = `<label>Name:</label> 
-      <span>${user.nome}</span>,<span> Email: ${user.email}</span>,
-      OBS: ${user.obs}</span>
+      <span>${user.DESIG}</span>,<span> Email: ${user.EMAIL}</span>,
+      OBS: ${user.NIF}</span>
        <button class="add_fatura">Adicionar</button>`;
       userElement
         .querySelector(".add_fatura")
@@ -234,7 +260,7 @@ function adicionarNaFatura(user) {
   const cliente_header = document.querySelector(".cliente_na_fatura");
   const cart_header = document.querySelector(".cart-header");
   cliente_header.innerHTML = `
-    <span>${user.nome}</span> - <span>${user.email}</span> - <span>${user.obs}</span>
+    <span>${user.DESIG}</span> - <span>${user.EMAIL}</span> - <span>${user.obs}</span>
     <button class="remove-item">X</button>`;
 
   // Adiciona um ouvinte de evento para remover o item do carrinho
