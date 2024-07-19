@@ -1,5 +1,3 @@
-/* style.css */
-
 * {
   /* --main--color: #2C3E50; Azul Marinho */
   --main--color:#fff;
@@ -242,30 +240,33 @@ body {
     border-radius: 5px;
 }
 .menu {
-   display: inline-flex;
-    background-color: var(--main--color);
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    align-items: center;
-    overflow-x:scroll ;
-    flex-wrap: wrap;
-    width: 100%;
+  background-color: var(--main--color);
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90vw;
+}
 
-    /* flex: 1; */
+.menu-content {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px;
 }
 
 .menu-btn {
   flex: 0 0 auto;
-    margin: 10px;
-    padding: 7px;
-    background-color: var(--main--button--color);
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    border-radius: 10px;
-    color: var(--text--color);
-    height: 50px;
-    
+  margin: 10px;
+  padding: 7px;
+  background-color: var(--main--button--color);
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 10px;
+  color: var(--text--color);
+  height: 20px;
 }
 
 .menu-btn:hover {
@@ -353,7 +354,7 @@ body {
   margin: 10px;
 }
 .cart {
-  flex: 0 0 300px;
+    flex: 0 0 300px;
     background-color: var(--text--color);
     padding: 10px;
     border-left: 1px solid #ddd;
@@ -362,10 +363,8 @@ body {
     flex-direction: column;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     font-size: 14px;
-    height: 100vh;
+    /* height: 100vh; */
 }
-
-
 #cart-items {
     overflow-y: scroll;
 }
@@ -713,5 +712,3 @@ button:hover {
 } */
 
 /* Estilos para a página de login do administrador */
-
-
