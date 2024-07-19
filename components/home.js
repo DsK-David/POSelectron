@@ -87,12 +87,12 @@ try {
 }
 async function renderCategoria() {
   await fetchCategoriaData();
-  const menu = document.getElementById("categoria-container");
+  const menu = document.getElementById("menu-content");
   menu.innerHTML = "";
   categoriaData.forEach((categoria) => {
     const categoriadiv = document.createElement("div");
     categoriadiv.className = "menu-btn";
-    categoriadiv.innerText = categoria.DESIG;
+    categoriadiv.innerHTML = `<span>${categoria.DESIG}</span>`;
     menu.appendChild(categoriadiv);
   });
 }
