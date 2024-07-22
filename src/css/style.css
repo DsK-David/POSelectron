@@ -9,6 +9,8 @@
   --background--color: #ECF0F1; /* Cinza Claro */
   --text--color: #FFFFFF; /* Branco */
   --hover--text--color: #d9dede; /* Cinza Escuro */
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -188,9 +190,15 @@ body {
     align-items: center;
     padding: 10px;
 }
+
+
 .header h1{
     margin: 0;
     margin-right: 20px;
+}
+.header img{
+  width: 100px;
+  margin: 0;
 }
 .header input[type="search"]{
     padding: 10px;
@@ -256,7 +264,7 @@ body {
   padding: 10px;
 }
 
-.menu-btn {
+.menu-btn  {
   flex: 0 0 auto;
   margin: 10px;
   padding: 7px;
@@ -264,8 +272,8 @@ body {
   border: none;
   cursor: pointer;
   text-align: center;
-  border-radius: 10px;
   color: var(--text--color);
+  border-radius: 10px;
   height: 20px;
 }
 
@@ -301,21 +309,23 @@ body {
 
 
 .item {
-    width:200px;
-    height: 200px;
-    margin: 10px;
-    /* padding: 10px; */
-    background-color: var(--text--color);
+    width: 220px; /* Aumentei a largura para dar mais espaço ao conteúdo */
+    height: 260px; /* Aumentei a altura para dar mais espaço ao conteúdo */
+    margin: 15px; /* Aumentei o espaçamento entre os itens */
+    padding: 15px; /* Adicionei padding para melhor espaçamento interno */
+    background-color: var(--item--background--color, #fff); /* Usando variável CSS com valor padrão */
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px; /* Aumentei o border-radius para uma aparência mais suave */
     text-align: center;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Aumentei a sombra para mais profundidade */
+    font-size: 16px; /* Aumentei o tamanho da fonte para melhor legibilidade */
+    transition: transform 0.3s, box-shadow 0.3s; /* Adicionei transições suaves */
 }
 
 
 .item:hover {
+  transform: translateY(-5px);
     background-color: #f7f7f7;
 }
 
@@ -325,6 +335,18 @@ body {
     border-radius: 5px 5px 0 0;
     margin-bottom: 10px;
 
+}
+.item span {
+    display: block; /* Transformei em bloco para garantir que cada parte fique em uma linha separada */
+    margin: 5px 0; /* Espaçamento entre os elementos de texto */
+    color: #333; /* Usando variável CSS com valor padrão */
+}
+
+.item strong {
+    display: block; /* Transformei em bloco para garantir que cada parte fique em uma linha separada */
+    color: var(--main--button--color); /* Usando variável CSS com valor padrão */
+    font-weight: bold;
+    margin-top: 10px; /* Espaçamento superior para separar do restante do conteúdo */
 }
 .cart-header {
   padding: 15px;
@@ -372,17 +394,25 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 15px 20px;
+  margin: 10px 0;
   border-bottom: 1px solid #eee;
   background: var(--main--button--color);
-  border-radius: 5px;
+  border-radius: 8px;
   color: var(--main--color);
-font-size: 14px;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cart-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .item-details {
   text-align: center;
   flex-grow: 1;
+  margin-right: 10px;
 }
 
 
