@@ -1,10 +1,11 @@
 - [x] tratamento de respostas de api todo os apis
 - [x] melhorar o bug no modal de adicionar cliente temporario
-- [] melhorar a parte do total a pagar
+- [x] melhorar a parte do total a pagar
 - [] resolver bug o carinho mexer por causa da tabela de clientes
 - [x] criar parte de listar categoria
 - [x] resolver erro de adicionar buscarcliente e adicionar na fatura
 - [] colocar uma função de adicionar quantidade de produto
-- [] criar uma função de buscar produto pelo barcode
+- [x] criar uma função de buscar produto pelo barcode
 - [] criar uma logica para finalizar compra
-- [] 
+- [] dar função para os botões da categoria de produtos
+- []

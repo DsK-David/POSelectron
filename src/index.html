@@ -70,7 +70,7 @@
         <button class="icon-btn">+</button>
         <button class="icon-btn">⧉</button>
         <button class="icon-btn search_customers">🔍</button>
-        <input type="number" class="barcode_input" id="barcode" placeholder="Codigo de Barra" ><button class="icon-btn search_customers">🔍</button>
+        <input type="text" class="barcode_input" id="barcode" placeholder="Codigo de Barra" ><button onclick="buscarProdutoPorBarCode()" class="icon-btn search_customers">🔍</button>
         <div class="cliente_na_fatura"></div>
       </div>
       </div>
@@ -82,7 +82,7 @@
                        
                         <div>Pagamento total: $<span id="payable-amount">0.00</span></div>
                     </div>
-                    <button id="hold-cart">Fechar Carinho</button>
+                    <button id="hold-cart" onclick="limparCarinho()">Limpar Carinho</button>
                     <button id="proceed" onclick="comprar()">Procedir</button>
                 
             </div>

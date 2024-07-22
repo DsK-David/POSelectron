@@ -118,11 +118,15 @@ let userData = []
   );
   const loginData = await loginResponse.json()
   loginData.forEach((data)=>{
-    alert(`ok logado como ${data.USERNAME} `)
-    const entidadeID = data.Entidade_ID
-    userData.push(entidadeID)
-    localStorage.setItem("entidadeID",JSON.stringify(userData))
-    location.href="index.html"
+  try {
+    alert(`ok logado como ${data.USERNAME} `);
+    const entidadeID = data.Entidade_ID;
+    userData.push(entidadeID);
+    localStorage.setItem("entidadeID", JSON.stringify(userData));
+    location.href = "index.html";
+  } catch (error) {
+    alert(error)
+  }
   })
    
 }
