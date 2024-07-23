@@ -44,9 +44,14 @@ async function renderItems() {
   itemsContainer.innerHTML = "";
   itemsData.forEach((item) => {
     const itemDiv = document.createElement("div");
+    var foto_produto = `https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}`
+    if(!item.FOTO_PERFIL){
+      foto_produto =
+        "https://www.casanovanet.com.br/wp-content/uploads/2020/09/download.jpg";
+    }
     itemDiv.className = "item";
     itemDiv.innerHTML = `
-      <img src="https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}" alt="${item.DESIG}">
+      <img src="`+foto_produto+`"   alt="${item.DESIG}">
       <br><span>${item.DESIG}</span>
       <br><strong>$${item.Preco_venda}</strong>
     `;
@@ -139,13 +144,19 @@ document
   async function buscarProdutoPorBarCode() {
     const barcode_input = document.getElementById("barcode").value;
     const url = `http://localhost:3000/api/v1/produto/barcode/${barcode_input}`;
-      itemsContainer.innerHTML = "";
+     
+    itemsContainer.innerHTML = "";
     itemsData = await fetchData(url);
     itemsData.forEach((item) => {
       const itemDiv = document.createElement("div");
+        var foto_produto = `https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}`;
+        if (!item.FOTO_PERFIL) {
+          foto_produto =
+            "https://www.casanovanet.com.br/wp-content/uploads/2020/09/download.jpg";
+        }
       itemDiv.className = "item";
       itemDiv.innerHTML = `
-      <img src="https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}" alt="${item.DESIG}">
+       <img src="`+foto_produto+`"   alt="${item.DESIG}">
       <br><span>${item.DESIG}</span>
       <br><strong>$${item.Preco_venda}</strong>
     `;
@@ -159,9 +170,14 @@ document
     itemsData = await fetchData(url)
     itemsData.forEach((item)=>{
       const itemDiv = document.createElement("div");
+       var foto_produto = `https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}`;
+       if (!item.FOTO_PERFIL) {
+         foto_produto =
+           "https://www.casanovanet.com.br/wp-content/uploads/2020/09/download.jpg";
+       }
       itemDiv.className = "item";
       itemDiv.innerHTML = `
-      <img src="https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}" alt="${item.DESIG}">
+       <img src="`+foto_produto+`"   alt="${item.DESIG}">
       <br><span>${item.DESIG}</span>
       <br><strong>$${item.Preco_venda}</strong>
     `;
