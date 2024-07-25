@@ -110,23 +110,37 @@ async function comprar() {
 }
 
 let userData = []
- async function logar(){
-  const username = document.getElementById("username").value
-  const password = document.getElementById("password").value
-  const loginResponse = await fetch(
-   ` http://localhost:3000/api/v1/auth/${username}/${password}`
-  );
-  const loginData = await loginResponse.json()
-  loginData.forEach((data)=>{
+async function logar() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
   try {
-    alert(`ok logado como ${data.USERNAME} `);
+    const response = await fetch(`http://localhost:3000/api/v1/auth/${username}/${password}`);
+    if (!response.ok) {
+      throw new Error('Falha na autenticação. Verifique suas credenciais e tente novamente.');
+    }
+
+    const loginData = await response.json();
+
+    if (loginData.length === 0) {
+      alert('Usuário não encontrado ou senha incorreta.');
+      return; // Sai da função se não houver dados de usuário
+    }
+
+    const data = loginData[0]; // Assumindo que a resposta sempre retorna um array e estamos interessados no primeiro item
+    if (!data.Entidade_ID) {
+      alert('Dados de entidade não encontrados. Por favor, tente novamente.');
+      return; // Sai da função se a entidade ID não estiver presente
+    }
+
+    alert(`Logado como ${data.USERNAME}`);
     const entidadeID = data.Entidade_ID;
-    userData.push(entidadeID);
-    localStorage.setItem("entidadeID", JSON.stringify(userData));
-    location.href = "index.html";
+    const perfilID=data.PERFIL_ID
+    localStorage.setItem("entidadeID", JSON.stringify(entidadeID)); // Armazena o ID da entidade no localStorage
+    localStorage.setItem("perfilID",JSON.stringify(perfilID))
+    location.href = "index.html"; // Redireciona para a página inicial após o login bem-sucedido
   } catch (error) {
-    alert(error)
+    console.error("Erro ao fazer login:", error);
+    alert(error.message || 'Erro desconhecido. Por favor, tente novamente.');
   }
-  })
-   
 }
