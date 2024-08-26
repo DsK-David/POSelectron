@@ -313,7 +313,7 @@ async function comprar() {
   const cartData = cart.map((item) => ({
     IdDoProduto: item.ID,
     NomeDoProduto: item.DESIG,
-    PrecoDoProtudo: item.Preco_venda,
+    PrecoDoProduto: item.Preco_venda,
     quantidade: item.quantity,
     total: (item.Preco_venda * item.quantity).toFixed(2),
   }));
