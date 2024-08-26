@@ -113,9 +113,20 @@ let userData = []
 async function logar() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
+  const error_message = document.querySelector(".error_messages");
+  const sucess_message = document.querySelector(".sucess_messages");
 
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/auth/${username}/${password}`);
+    const response = await fetch(
+      `http://localhost:3000/api/v1/auth/${username}/${password}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "authorization":"david"
+        },
+      }
+    );
+
     if (!response.ok) {
       throw new Error('Falha na autenticação. Verifique suas credenciais e tente novamente.');
     }
@@ -133,14 +144,21 @@ async function logar() {
       return; // Sai da função se a entidade ID não estiver presente
     }
 
-    alert(`Logado como ${data.USERNAME}`);
+    // alert(`Logado como ${data.USERNAME}`);
+    sucess_message.innerHTML = `<span>Logado com sucesso na conta de ${data.USERNAME}</span>`;
     const entidadeID = data.Entidade_ID;
-    const perfilID=data.PERFIL_ID
+    const perfilID=data.ID
     localStorage.setItem("entidadeID", JSON.stringify(entidadeID)); // Armazena o ID da entidade no localStorage
     localStorage.setItem("perfilID",JSON.stringify(perfilID))
-    location.href = "index.html"; // Redireciona para a página inicial após o login bem-sucedido
+    setTimeout(() => {
+      location.href = "index.html"; // Redireciona para a página inicial após o login bem-sucedido
+    }, 2000);
   } catch (error) {
     console.error("Erro ao fazer login:", error);
-    alert(error.message || 'Erro desconhecido. Por favor, tente novamente.');
+    // alert(error.message || 'Erro desconhecido. Por favor, tente novamente.');
+    setTimeout(() => {
+      location.href = "login.html";
+    }, 2000);
+    error_message.innerHTML = `<span>${error.message}</span>`;
   }
 }

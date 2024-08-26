@@ -87,6 +87,7 @@ function SalvarCliente() {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "authorization": "david",
     },
     body: JSON.stringify({
       nome: nome,

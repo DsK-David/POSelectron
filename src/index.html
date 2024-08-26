@@ -23,11 +23,11 @@
     
         <div class="sidebar">
             <button id="home" class="active" onclick="home()"><i class='bx bx-home' ></i> <br> Home</button>
-            <button id="customers" onclick="clientes()"><i class='bx bx-user'></i>Clientes</button>
-            <button id="cashier" onclick="cashier()"><i class='bx bxs-coin'></i>Cashier</button>
+            <button id="customers" onclick="clientes()"><i class='bx bx-group'></i>Clientes</button>
             <button id="orders" onclick="orders()"><i class='bx bx-shopping-bag' ></i>Ordens</button>
             <button id="reports" onclick="dashboard()"><i class='bx bxs-report' ></i>Dashboard</button>
             <button id="settings" onclick="settings()"><i class='bx bx-cog' ></i>Definições</button>
+            <button id="customers" onclick="funcionario()"><i class='bx bx-user'></i>Funcionario</button>
             <button id="logout" onclick="logout()"><i class='bx bx-log-out-circle' ></i>Logout</button>
         </div>
         <div class="main">
@@ -36,16 +36,17 @@
   <div class="modal-content">  
     
   </div>
+
 </div>
             <div class="header">
                 <div class="entidade_container" id="entidade">
 
                 </div>
                 <div class="search_container">
-                    <input type="search" name="" id="">
-                    <button><i class='bx bx-search-alt-2'></i></button>
+                    <input type="search" name="" id="nome_produto">
+                    <button onclick="buscarProdutoPorNome()"><i class='bx bx-search-alt-2'></i></button>
                 </div>
-                <button class="wireless_widget"><span><i class='bx bx-wifi'></i></span></button>
+                <button id= "wireless" class="wireless_widget"><span><i class='bx bx-wifi'></i></span></button>
 
             </div>
             <div class="menu" id="categoria-container">
@@ -93,5 +94,6 @@
     <script src="../components/home.js"></script>
     <script src="../components/clientes.js"></script>
     <script src="../components/dashboard.js"></script>
+    <script src="../components/funcionario.js"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@ function createWindow() {
     width: 800,
     height: 600,
     maximizable: true,
-    icon: path.join(__dirname, "src", "img", "logo.icns"),
+    icon: __dirname+"/src/img/logo.icns",
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
