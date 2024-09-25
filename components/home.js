@@ -1,16 +1,12 @@
-const { WebSocketServer } = require("ws");
+// const { fetchItemsData } = require("../utils/fetchItemsData.js");
 
 let cart = [];
 let itemsData = [];
 let entidadesData = [];
 let categoriaData = [];
-// const WebSocketServer = require("sw")
+require("dotenv").config();
 const itemsContainer = document.getElementById("items");
-const homeButton = document.getElementById("home");
-const customersButton = document.getElementById("customers");
 const cartItemsContainer = document.getElementById("cart-items");
-const subtotalElement = document.getElementById("subtotal");
-const taxElement = document.getElementById("tax");
 const payableAmountElement = document.getElementById("payable-amount");
 
 async function fetchData(url) {
@@ -18,7 +14,7 @@ async function fetchData(url) {
     const response = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
-        "authorization": "david",
+        authorization: `${process.env.AUTH_TOKEN}`,
       },
     });
 
@@ -37,6 +33,7 @@ async function fetchItemsData() {
   const url = `http://localhost:3000/api/v1/produto/${entidadeID}`;
   itemsData = await fetchData(url);
 }
+// fetchItemsData()
 
 async function fetchEntidadeData() {
   const entidadeID = JSON.parse(localStorage.getItem("entidadeID"));
@@ -55,14 +52,17 @@ async function renderItems() {
   itemsContainer.innerHTML = "";
   itemsData.forEach((item) => {
     const itemDiv = document.createElement("div");
-    var foto_produto = `https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}`
-    if(!item.FOTO_PERFIL){
+    var foto_produto = `https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}`;
+    if (!item.FOTO_PERFIL) {
       foto_produto =
         "https://www.casanovanet.com.br/wp-content/uploads/2020/09/download.jpg";
     }
     itemDiv.className = "item";
-    itemDiv.innerHTML = `
-      <img src="`+foto_produto+`"   alt="${item.DESIG}">
+    itemDiv.innerHTML =
+      `
+      <img src="` +
+      foto_produto +
+      `"   alt="${item.DESIG}">
       <br><span>${item.DESIG}</span>
       <br><strong>$${item.Preco_venda}</strong>
     `;
@@ -94,7 +94,6 @@ async function renderCategoria() {
     menu.appendChild(categoriaDiv);
   });
 }
-
 
 function addToCart(item) {
   // Adiciona a quantidade inicial de 1 ao item
@@ -161,8 +160,6 @@ function updateSubtotal() {
   payableAmountElement.innerText = newSubtotal.toFixed(2);
 }
 
-
-
 function scrollToBottom(container) {
   container.scrollTop = container.scrollHeight;
 }
@@ -177,7 +174,7 @@ function home() {
 function limparCarinho() {
   cart = [];
   renderCart();
-  renderItems()
+  renderItems();
 }
 
 document
@@ -192,7 +189,7 @@ document
     }
   });
 async function buscarProdutoPorBarCode() {
-  const barcode =  document.getElementById("barcode").value;
+  const barcode = document.getElementById("barcode").value;
   const url = `http://localhost:3000/api/v1/produto/barcode/${barcode}`;
 
   itemsContainer.innerHTML = "";
@@ -217,19 +214,26 @@ async function buscarProdutoPorBarCode() {
 
 async function buscarProdutoPorNome() {
   const entidadeID = JSON.parse(localStorage.getItem("entidadeID"));
-  let nome_produto = document.getElementById("nome_produto").value.trim().toLowerCase(); // Converte para minúsculas
-  if (nome_produto.length > 0) { // Verifica se o campo não está vazio
+  let nome_produto = document
+    .getElementById("nome_produto")
+    .value.trim()
+    .toLowerCase(); // Converte para minúsculas
+  if (nome_produto.length > 0) {
+    // Verifica se o campo não está vazio
     const url = `http://localhost:3000/api/v1/produto/nome/${nome_produto}/${entidadeID}`;
     itemsContainer.innerHTML = "";
     try {
       itemsData = await fetchData(url);
       // Filtra os itens recebidos para incluir apenas aqueles cujo nome começa com a string digitada, ignorando a caixa
-      const filteredItems = itemsData.filter((item)=> item.DESIG.trim().toLowerCase().includes(nome_produto))
+      const filteredItems = itemsData.filter((item) =>
+        item.DESIG.trim().toLowerCase().includes(nome_produto)
+      );
       filteredItems.forEach((item) => {
         const itemDiv = document.createElement("div");
         var foto_produto = `https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}`;
         if (!item.FOTO_PERFIL) {
-          foto_produto = "https://www.casanovanet.com.br/wp-content/uploads/2020/09/download.jpg";
+          foto_produto =
+            "https://www.casanovanet.com.br/wp-content/uploads/2020/09/download.jpg";
         }
         itemDiv.className = "item";
         itemDiv.innerHTML = `
@@ -244,58 +248,63 @@ async function buscarProdutoPorNome() {
       console.error("Erro ao buscar produtos:", error);
     }
   } else {
-    home() // Limpa o container se o campo estiver vazio
+    home(); // Limpa o container se o campo estiver vazio
   }
 }
 
 // Adiciona um event listener para buscar produtos à medida que o usuário digita, com debounce para reduzir o número de chamadas à API
-document.getElementById("nome_produto").addEventListener('input', debounce(buscarProdutoPorNome, 300));
+document
+  .getElementById("nome_produto")
+  .addEventListener("input", debounce(buscarProdutoPorNome, 300));
 
 function debounce(func, wait) {
   let timeout;
-  return function(...args) {
+  return function (...args) {
     const context = this;
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(context, args), wait);
-  }
+  };
 }
 
 // Adiciona um event listener para buscar produtos à medida que o usuário digita
 document
   .getElementById("nome_produto")
   .addEventListener("input", buscarProdutoPorNome);
-  async function mostrarProdutoPorCategoria(categoriaID){
-    const url = `http://localhost:3000/api/v1/produto/categoria/${categoriaID}`;
-    itemsContainer.innerHTML = ''
-    itemsData = await fetchData(url)
-    itemsData.forEach((item)=>{
-      const itemDiv = document.createElement("div");
-       var foto_produto = `https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}`;
-       if (!item.FOTO_PERFIL) {
-         foto_produto =
-           "https://www.casanovanet.com.br/wp-content/uploads/2020/09/download.jpg";
-       }
-      itemDiv.className = "item";
-      itemDiv.innerHTML = `
-       <img src="`+foto_produto+`"   alt="${item.DESIG}">
+async function mostrarProdutoPorCategoria(categoriaID) {
+  const url = `http://localhost:3000/api/v1/produto/categoria/${categoriaID}`;
+  itemsContainer.innerHTML = "";
+  itemsData = await fetchData(url);
+  itemsData.forEach((item) => {
+    const itemDiv = document.createElement("div");
+    var foto_produto = `https://sige.opentec.cv/web/imagem/imagens_produtos/${item.FOTO_PERFIL}`;
+    if (!item.FOTO_PERFIL) {
+      foto_produto =
+        "https://www.casanovanet.com.br/wp-content/uploads/2020/09/download.jpg";
+    }
+    itemDiv.className = "item";
+    itemDiv.innerHTML =
+      `
+       <img src="` +
+      foto_produto +
+      `"   alt="${item.DESIG}">
       <br><span>${item.DESIG}</span>
       <br><strong>$${item.Preco_venda}</strong>
     `;
-  itemsContainer.appendChild(itemDiv);
-    })
-  }
+    itemsContainer.appendChild(itemDiv);
+  });
+}
 function checkInternetConnection() {
-   const wireless_widget = document.getElementById("wireless");
-  fetch('https://www.google.com')
-    .then(response => {
+  const wireless_widget = document.getElementById("wireless");
+  fetch("https://www.google.com")
+    .then((response) => {
       if (response.ok) {
-      wireless_widget.style.color = "#1ABC9C";
+        wireless_widget.style.color = "#1ABC9C";
       } else {
-       wireless_widget.style.color = "red";
+        wireless_widget.style.color = "red";
       }
     })
-    .catch(error => {
-     wireless_widget.style.color = "red";
+    .catch((error) => {
+      wireless_widget.style.color = "red";
     });
 }
 async function comprar() {
@@ -354,7 +363,10 @@ async function comprar() {
         const url = URL.createObjectURL(data);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "fatura.pdf"; // Nome do arquivo PDF
+        const date=new Date()
+        a.download = `fatura_${date.getFullYear()}-${
+          date.getMonth() + 1
+        }-${date.getDate()}_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.pdf`; // Nome do arquivo PDF
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

@@ -80,21 +80,17 @@ function SalvarCliente() {
   const nome = document.getElementById("nome").value;
   const contacto = document.getElementById("contacto").value; // Corrigido o ID
   const email = document.getElementById("email").value;
-  const endereco = document.getElementById("endereco").value;
-  const observacoes = document.getElementById("observacoes").value;
-
-  fetch("http://localhost:3300/api/v1/clientes", {
+  fetch("http://localhost:3000/api/v1/cliente", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "authorization": "david",
     },
     body: JSON.stringify({
-      nome: nome,
-      telefone: contacto,
-      email: email,
-      endereco: endereco,
-      obs: observacoes,
+      DESIG: nome,
+      TELEFONE: contacto,
+      EMAIL: email,
+      Entidade_ID:entidadeID
+      
     }),
   })
     .then((response) => response.json())
