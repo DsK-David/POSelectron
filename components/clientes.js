@@ -10,34 +10,138 @@ function clientes() {
   customersButton.className = "select";
 
   const itemsContainer = document.getElementById("items");
-  // Adiciona o botão de adicionar clientes no canto superior direito
   itemsContainer.innerHTML = `
-  <div>
-    <button id="add-client-btn" onclick="abrirModalDeAdicionarCliente()">Adicionar Cliente</button>
-   <div id="customer-list">
-                <h2>Lista de Clientes</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Codigo</th>
-                            <th>NIF</th>
-                            <th>Telefone</th>
-                            <th>Imposto</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="customer-table-body">
-                        <!-- Customers will be populated here by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-            </div>
+    <div>
+      <input type="number" id="nifClienteInput" class="nif_cliente" placeholder="Adicione o NIF do cliente">
+      <button class="btn_cliente_nif" onclick="mostrarClientePorNIF()">Buscar</button>
+     <!-- <button id="add-client-btn" onclick="abrirModalDeAdicionarCliente()">Adicionar Cliente</button> -->
+      
+      <div id="customer-list">
+        <h2>Lista de Clientes</h2>
+        <div id="customer-card-container" class="customer-card-container">
+          <!-- Os cartões de clientes serão populados aqui pelo JavaScript -->
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
   `;
 
-  // Restante do código da função...
   MostrarClientes();
+}
+
+function MostrarClientes(page = 1) {
+  const apiUrl = `http://localhost:3000/api/v1`;
+  currentPage = page;
+
+  fetch(
+    `${apiUrl}/cliente/entidade?id=${id}&page=${currentPage}&limit=${rowsPerPage}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const customerCardContainer = document.getElementById("customer-card-container");
+      customerCardContainer.innerHTML = "";
+
+      // Cria um cartão para cada cliente
+      data.data.forEach((customer) => {
+        const card = document.createElement("div");
+        card.className = "customer-card";
+
+        card.innerHTML = `
+          <h3>${customer.DESIG}</h3>
+          <p><strong>Email:</strong> ${customer.EMAIL}</p>
+          <p><strong>Código:</strong> ${customer.CODIGO}</p>
+          <p><strong>NIF:</strong> ${customer.NIF}</p>
+          <p><strong>Telefone:</strong> ${customer.TELEFONE}</p>
+          <p><strong>Imposto:</strong> ${customer.APLICAR_IMPOSTOS}</p>
+          <div class="actions">
+            <button class="edit-btn" onclick="editarCliente(${customer.ID})"><i class='bx bx-edit-alt'></i> Editar</button>
+            <button class="delete-btn" onclick="deletarCliente(${customer.ID})"><i class='bx bx-trash'></i> Excluir</button>
+          </div>
+        `;
+
+        customerCardContainer.appendChild(card);
+      });
+
+      const totalPages = data.meta?.totalPages || data.data.meta?.totalPages;
+      renderPagination(totalPages);
+    })
+    .catch((error) => console.error("Erro ao carregar clientes:", error));
+}
+
+let currentPage = 1; // Página atual
+const rowsPerPage = 20; // Número de registros por página
+
+function renderPagination(totalPages) {
+  const paginationContainer = document.getElementById("pagination");
+  paginationContainer.innerHTML = ""; // Limpa a paginação anterior
+
+  // Botão de página anterior
+  const prevButton = document.createElement("button");
+  prevButton.innerText = "Anterior";
+  prevButton.disabled = currentPage === 1;
+  prevButton.onclick = () => MostrarClientes(currentPage - 1);
+  paginationContainer.appendChild(prevButton);
+
+  // Display da página atual e total de páginas
+  const pageDisplay = document.createElement("span");
+  pageDisplay.innerText = `Página ${currentPage} de ${totalPages}`;
+  pageDisplay.style.margin = "0 10px";
+  paginationContainer.appendChild(pageDisplay);
+
+  // Botão de próxima página
+  const nextButton = document.createElement("button");
+  nextButton.innerText = "Próxima";
+  nextButton.disabled = currentPage === totalPages;
+  nextButton.onclick = () => MostrarClientes(currentPage + 1);
+  paginationContainer.appendChild(nextButton);
+}
+function mostrarClientePorNIF() {
+  const nifCliente = document.getElementById("nifClienteInput").value;
+  const apiUrl = `http://localhost:3000/api/v1`;
+
+  if (!nifCliente) {
+    alert("Por favor, insira um NIF para buscar.");
+    return;
+  }
+
+  const customerContainer = document.getElementById("customer-list");
+  customerContainer.innerHTML = ""; // Limpa o container para exibir apenas o cliente específico
+
+  // URL para buscar o cliente específico pelo NIF
+  const url = `${apiUrl}/cliente/nif?nif=${nifCliente}`;
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      const customers = data.data;
+
+      if (customers.length === 0) {
+        customerContainer.innerHTML =
+          "<p>Nenhum cliente encontrado com esse NIF.</p>";
+        return;
+      }
+
+      // Exibe o cliente encontrado
+      customers.forEach((customer) => {
+        const card = document.createElement("div");
+        card.className = "customer-card";
+
+        card.innerHTML = `
+          <h3>${customer.DESIG}</h3>
+          <p>Email: ${customer.EMAIL}</p>
+          <p>Código: ${customer.CODIGO}</p>
+          <p>NIF: ${customer.NIF}</p>
+          <p>Telefone: ${customer.TELEFONE}</p>
+          <p>Imposto: ${customer.APLICAR_IMPOSTOS}</p>
+         <div class="actions">
+            <button class="edit-btn" onclick="editarCliente(${customer.ID})"><i class='bx bx-edit-alt'></i> Editar</button>
+            <button class="delete-btn" onclick="deletarCliente(${customer.ID})"><i class='bx bx-trash'></i> Excluir</button>
+          </div>
+        `;
+        customerContainer.appendChild(card);
+      });
+    })
+    .catch((error) => console.error("Erro ao buscar cliente:", error));
 }
 function abrirModalDeAdicionarCliente() {
   const modal = document.getElementById("MainModal");
@@ -100,33 +204,8 @@ function SalvarCliente() {
     .catch((error) => console.error("erro", error));
   MostrarClientes();
 }
-function MostrarClientes() {
-  const apiUrl = `http://localhost:3000/api/v1`;
-  fetch(`${apiUrl}/cliente/${id}`)
-    .then((response) => response.json())
-    .then((data) => {
-      const customerTableBody = document.getElementById("customer-table-body");
-      customerTableBody.innerHTML = "";
-      data.forEach((customer) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-                    <td>${customer.DESIG}</td>
-                    <td>${customer.EMAIL}</td>
-                    <td>${customer.CODIGO}</td>
-                    <td>${customer.NIF}</td>
-                    <td>${customer.TELEFONE}</td>
-                    <td>${customer.APLICAR_IMPOSTOS}</td>
-                   
-                    <td>
-                        <button class="edit-btn" onclick="editarCliente(${customer.ID})"><i class='bx bx-edit-alt'></i></button>
-                        <button class="delete-btn" onclick="deletarCliente(${customer.ID})"><i class='bx bx-trash'></i></button>
-                    </td>
-                `;
-        customerTableBody.appendChild(row);
-      });
-    })
-    .catch((error) => console.error("Erro ao carregar clientes:", error));
-}
+
+
 function deletarCliente(id) {
   const apiUrl = "http://localhost:3300/api/v1";
   fetch(`${apiUrl}/clientes/${id}`, {

@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,87 +8,70 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body onload="home()">
-   <!-- <header class="app-header">
-        <div class="header-content">
-            <h1>Sistema POS</h1>
-            <div class="search-bar">
-                <input type="text" placeholder="Pesquisar..." class="search-input">
-                <i class='bx bx-search'></i>
-            </div>
-          
-        </div>
-    </header> -->
     <div class="container">
-    
         <div class="sidebar">
-            <button id="home" class="active" onclick="home()"><i class='bx bx-home' ></i> <br> Home</button>
+            <button id="home" class="active" onclick="home()"><i class='bx bx-home'></i> <br> Home</button>
             <button id="customers" onclick="clientes()"><i class='bx bx-group'></i>Clientes</button>
-            <button id="orders" onclick="orders()"><i class='bx bx-shopping-bag' ></i>Ordens</button>
-            <button id="reports" onclick="dashboard()"><i class='bx bxs-report' ></i>Dashboard</button>
-            <button id="settings" onclick="settings()"><i class='bx bx-cog' ></i>Definições</button>
-            <button id="customers" onclick="funcionario()"><i class='bx bx-user'></i>Funcionario</button>
-            <button id="logout" onclick="logout()"><i class='bx bx-log-out-circle' ></i>Logout</button>
+            <button id="orders" onclick="orders()"><i class='bx bx-shopping-bag'></i>Ordens</button>
+            <button id="reports" onclick="dashboard()"><i class='bx bxs-report'></i>Dashboard</button>
+            <button id="settings" onclick="settings()"><i class='bx bx-cog'></i>Definições</button>
+            <button id="employee" onclick="funcionario()"><i class='bx bx-user'></i>Funcionario</button>
+            <button id="logout" onclick="logout()"><i class='bx bx-log-out-circle'></i>Logout</button>
         </div>
+        
         <div class="main">
-            <!-- Modal -->
-<div id="MainModal" class="modal">
-  <div class="modal-content">  
-    
-  </div>
-
-</div>
-            <div class="header">
-                <div class="entidade_container" id="entidade">
-
+            <!-- Modal principal -->
+            <div id="MainModal" class="modal">
+                <div class="modal-content">
+                     <div class="loading" id="loading">
+                        
+                     </div>
                 </div>
+            </div>
+
+            <!-- Modal para Venda -->
+            <!-- <div id="checkout-popup" class="checkout-popup">
+                <div class="popup-content" id="popup-content"></div>
+            </div> -->
+
+            <div class="header">
+                <div class="entidade_container" id="entidade"></div>
                 <div class="search_container">
-                    <input type="search" name="" id="nome_produto">
+                    <input type="search" id="nome_produto" placeholder="Buscar Produto">
                     <button onclick="buscarProdutoPorNome()"><i class='bx bx-search-alt-2'></i></button>
                 </div>
-                <button id= "wireless" class="wireless_widget"><span><i class='bx bx-wifi'></i></span></button>
-
+                <button id="wireless" class="wireless_widget"><span><i class='bx bx-wifi'></i></span></button>
             </div>
+
             <div class="menu" id="categoria-container">
-                <div class="menu-content" id="menu-content">
-
-                </div>
-                <!-- <button class="menu-btn" id="starters">Starters</button>
-                <button class="menu-btn" id="breakfast">Breakfast</button>
-                <button class="menu-btn" id="lunch">Lunch</button>
-                <button class="menu-btn" id="supper">Supper</button>
-                <button class="menu-btn" id="desserts">Desserts</button>
-                <button class="menu-btn" id="beverages">Beverages</button> -->
+                <div class="menu-content" id="menu-content"></div>
             </div>
+
             <div class="content">
-                <div class="items" id="items">
-                    <!-- Items will be dynamically loaded here -->
-                </div>
+                <div class="items" id="items"></div>
+
                 <div class="cart">
                     <div class="cart-header">
-      <button class="header-btn">+ adicionar cliente</button>
-      <div class="header-icons">
-        <button class="icon-btn">+</button>
-        <button class="icon-btn">⧉</button>
-        <button class="icon-btn search_customers">🔍</button>
-        <input type="text" class="barcode_input" id="barcode" placeholder="Codigo de Barra" ><button onclick="buscarProdutoPorBarCode()" class="icon-btn search_customers">🔍</button>
-        <div class="cliente_na_fatura"></div>
-      </div>
-      </div>
-                    <h2>Carinho</h2>
-                    <div id="cart-items">
-
+                        <div class="header-icons">
+                            
+                            <input type="text" class="barcode_input" id="barcode" placeholder="Codigo de Barra">
+                            <button onclick="buscarProdutoPorBarCode()" class="icon-btn search_customers">🔍</button>
+                            <div class="cliente_na_fatura"></div>
+                        </div>
                     </div>
+
+                    <h2>Carrinho</h2>
+                    <div id="cart-items"></div>
                     <div class="cart-total">
-                       
                         <div>Pagamento total: $<span id="payable-amount">0.00</span></div>
                     </div>
-                    <button id="hold-cart" onclick="limparCarinho()">Limpar Carinho</button>
-                    <button id="proceed" onclick="comprar()">Procedir</button>
-                
+
+                    <button id="hold-cart" onclick="limparCarinho()">Limpar Carrinho</button>
+                    <button id="proceed" onclick="abriCheckoutModal()">Proceder</button>
+                </div>
             </div>
         </div>
     </div>
-  
     <script src="./js/main.js"></script>
     <script src="../components/home.js"></script>
     <script src="../components/clientes.js"></script>
